@@ -157,6 +157,25 @@ section{position:relative;z-index:1;padding-block:56px}
 .lot .site svg{width:16px;height:16px}
 .partners a{color:inherit;text-decoration:none}
 .partners li:has(a):hover{border-color:var(--blue-ink)}
+/* Animation d'ouverture */
+@keyframes dropIn{0%{transform:translateY(-140px)}60%{transform:translateY(10px)}80%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes logoIn{0%{opacity:0;transform:scale(.5) rotate(-25deg)}70%{opacity:1;transform:scale(1.06) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes popIn{0%{opacity:0;transform:rotate(-2deg) scale(.4)}65%{opacity:1;transform:rotate(-6deg) scale(1.15)}100%{transform:rotate(-2deg) scale(1)}}
+.baubles{animation:dropIn 1s cubic-bezier(.3,1.3,.6,1) both}
+.hero .eyebrow{animation:riseIn .6s .15s ease-out both}
+.hero h1{animation:riseIn .7s .25s ease-out both}
+.hero .logo{animation:logoIn .9s .5s cubic-bezier(.3,1.3,.6,1) both}
+.hero .hook{animation:riseIn .6s .85s ease-out both}
+.hero .value{animation:popIn .6s 1.05s cubic-bezier(.3,1.4,.6,1) both}
+.hero .buy{animation:riseIn .6s 1.25s ease-out both}
+.hero .chances,.hero .chances+p{animation:riseIn .6s 1.35s ease-out both}
+.hero .count{animation:riseIn .7s 1.45s ease-out both}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:30}
+@media (prefers-reduced-motion:reduce){
+  .baubles,.hero .eyebrow,.hero h1,.hero .logo,.hero .hook,.hero .value,.hero .buy,.hero .chances,.hero .chances+p,.hero .count{animation:none}
+  #confetti{display:none}
+}
 .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 .faq details{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:0 18px}
 .faq summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:800;font-size:17px;position:relative}
@@ -506,6 +525,43 @@ window.addEventListener('message', function(e){
     });
     targets.forEach(function(t){ io.observe(t); });
   }
+})();
+</script>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<script>
+(function(){
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var c = document.getElementById('confetti'); if (!c || !c.getContext) return;
+  var x = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W, H, parts = [], t0;
+  var colors = ['#2B3FB8','#D1306F','#138F73','#F2B705','#D93A3A'];
+  function size(){ W = c.clientWidth; H = c.clientHeight; c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
+  function burst(){
+    size();
+    var el = document.querySelector('.hero .value'), r = el ? el.getBoundingClientRect() : {left:W/2,top:H/3,width:0,height:0};
+    var ox = r.left + r.width/2, oy = r.top + r.height/2, n = W < 600 ? 90 : 150;
+    for (var i = 0; i < n; i++) {
+      var a = -Math.PI/2 + (Math.random()-.5) * Math.PI * 1.3, v = 6 + Math.random()*9;
+      parts.push({x:ox, y:oy, vx:Math.cos(a)*v, vy:Math.sin(a)*v, w:6+Math.random()*6, h:4+Math.random()*5,
+        r:Math.random()*6.28, vr:(Math.random()-.5)*.35, c:colors[i % colors.length]});
+    }
+    t0 = performance.now(); requestAnimationFrame(step);
+  }
+  function step(now){
+    var age = (now - t0) / 1000;
+    x.clearRect(0,0,W,H);
+    var alive = 0;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.vy += .32; p.vx *= .985; p.vy *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      if (p.y > H + 20) continue;
+      alive++;
+      x.save(); x.globalAlpha = Math.max(0, 1 - Math.max(0, age - 2) / 1); x.translate(p.x, p.y); x.rotate(p.r);
+      x.fillStyle = p.c; x.fillRect(-p.w/2, -p.h/2, p.w, p.h * Math.abs(Math.cos(p.r*1.7)) + 1); x.restore();
+    }
+    if (alive && age < 3.2) requestAnimationFrame(step); else c.remove();
+  }
+  setTimeout(burst, 1200);
 })();
 </script>
 </body>
