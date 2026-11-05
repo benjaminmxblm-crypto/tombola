@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Grande tombola de Noël des P'tits Rennevillois : plus de 30 lots (plus de 350 €), 2 € le ticket, tirage le 15 décembre.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tombola-ptits-rennevillois.vercel.app/">
+<meta property="og:title" content="Grande tombola de Noël des P'tits Rennevillois">
+<meta property="og:description" content="Plus de 30 lots à gagner, dont une tablette tactile ! 2 € le ticket, tirage le mardi 15 décembre.">
+<meta property="og:image" content="https://tombola-ptits-rennevillois.vercel.app/img/partage.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://tombola-ptits-rennevillois.vercel.app/">
 <style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Tombola des P'tits Rennevillois</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -87,7 +97,7 @@ section{position:relative;z-index:1;padding-block:56px}
 .jackpot h3{font-size:clamp(34px,5vw,48px);font-weight:800;line-height:1;margin-top:6px}
 .jackpot p{margin:6px 0 0;font-weight:700;color:#DDE3FA}
 .jackpot .star{position:absolute;right:26px;top:18px;width:46px;height:46px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.lots{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px;list-style:none;margin:0;padding:0}
+.lots{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));align-items:start;gap:14px;list-style:none;margin:0;padding:0}
 .lot{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start;background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;transition:transform .18s ease,border-color .18s ease}
 .lot:hover{transform:translateY(-3px) rotate(-.4deg);border-color:var(--pink-line)}
 .lot .ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;color:#FFFFFF}
@@ -113,6 +123,44 @@ section{position:relative;z-index:1;padding-block:56px}
 .ha-fallback{text-align:center;margin:14px 0 0;font-weight:700;color:var(--muted)}
 .foot .credit{margin:22px 0 0;font-size:13px;color:var(--band-soft)}
 .foot .credit a{color:#FFFFFF;font-weight:800}
+.chances{margin:12px 0 0;font-weight:700;color:var(--muted)}
+.chances strong{color:var(--ink)}
+.share{margin:22px auto 0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.share p{margin:0;font-weight:800}
+.share-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.sbtn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:8px 18px;border-radius:999px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;font-size:16px;text-decoration:none;cursor:pointer}
+.sbtn:hover{border-color:var(--blue-ink)}
+.sbtn svg{width:20px;height:20px;flex:0 0 auto}
+.sbtn.wa svg{color:#1FA855}.sbtn.fb svg{color:#1877F2}
+.copied{min-height:1.4em;margin:0;font-size:14px;font-weight:700;color:var(--teal)}
+.foot .share p,.foot .copied{color:#FFFFFF}
+.foot .sbtn{border-color:rgba(255,255,255,.35);background:transparent;color:#FFFFFF}
+.foot .sbtn.wa svg,.foot .sbtn.fb svg{color:#FFFFFF}
+.jackpot.has-photo{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.jackpot .photo{width:100%;height:auto;aspect-ratio:4/3;object-position:left center;object-fit:cover;border-radius:18px;background:#FFFFFF;max-width:100%}
+.lot.photo-lot{grid-template-columns:1fr}
+.lot.photo-lot img{width:100%;height:auto;aspect-ratio:16/8;object-fit:cover;border-radius:14px;max-width:100%}
+.lot.photo-lot .lot-body{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start}
+.faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.faq details{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:0 18px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:800;font-size:17px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:0;top:12px;font-family:var(--display);font-size:26px;color:var(--blue-ink);line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details p{margin:0 0 16px;color:var(--muted);font-weight:600}
+.buybar{display:none}
+@media (max-width:760px){
+  .jackpot.has-photo{grid-template-columns:1fr}
+  .buybar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;align-items:center;justify-content:space-between;gap:12px;
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    background:var(--card);border-top:2px solid var(--line);box-shadow:0 -6px 20px var(--shadow);transition:transform .25s ease}
+  .buybar.away{transform:translateY(120%)}
+  .buybar .bp{font-weight:800;line-height:1.1}
+  .buybar .bp strong{display:block;font-family:var(--display);font-size:26px;color:var(--pink)}
+  .buybar .btn{min-height:48px;padding:10px 20px;font-size:17px}
+  body{padding-bottom:84px}
+}
+@media (prefers-reduced-motion:reduce){.buybar{transition:none}}
 .cta-end{text-align:center;margin:34px 0 0}
 .qr p{margin:0;max-width:30ch;font-weight:700;color:var(--muted)}
 
@@ -178,7 +226,8 @@ section{position:relative;z-index:1;padding-block:56px}
         Je prends mes tickets
       </a>
     </div>
-    <p style="margin:14px 0 0"><a class="link-soft" href="#lots">Voir tous les lots</a></p>
+    <p class="chances">Plus de tickets, plus de chances : <strong>5 tickets = 5 chances</strong> de gagner la tablette.</p>
+    <p style="margin:10px 0 0"><a class="link-soft" href="#lots">Voir tous les lots</a></p>
 
     <div class="count" role="group" aria-labelledby="count-title">
       <h2 id="count-title">Fin des ventes dans</h2>
@@ -189,6 +238,15 @@ section{position:relative;z-index:1;padding-block:56px}
         <div class="cell"><b id="s">--</b><small>sec</small></div>
       </div>
       <p id="count-note">Ventes jusqu'au <strong>vendredi 11 décembre à 17h59</strong> · Tirage le <strong>mardi 15 décembre</strong></p>
+    </div>
+    <div class="share">
+      <p>Faites tourner auprès de vos proches !</p>
+      <div class="share-btns">
+        <a class="sbtn wa" data-share="whatsapp" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.2-.2-.5-.3z"/></svg>WhatsApp</a>
+        <a class="sbtn fb" data-share="facebook" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.8c0-.8.5-1 .9-1h2.4V2.1L14 2c-3.6 0-4.4 2.7-4.4 4.4v2.1H7.4v3.8h2.2V22h4.4v-9.7h3l.4-3.8z"/></svg>Facebook</a>
+        <button class="sbtn" type="button" data-share="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copier le lien</button>
+      </div>
+      <p class="copied" aria-live="polite"></p>
     </div>
   </div>
 </header>
@@ -202,8 +260,8 @@ section{position:relative;z-index:1;padding-block:56px}
         <p>Plus de 350 € de lots, offerts par les commerçants et partenaires du coin. Merci à eux !</p>
       </div>
 
-      <article class="jackpot">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></div>
+      <article class="jackpot has-photo">
+        <img class="photo" src="img/tablette.jpg" alt="Boîte de la tablette tactile à gagner" width="800" height="598" loading="lazy">
         <div>
           <span class="tag">Gros lot</span>
           <h3>Tablette tactile</h3>
@@ -213,7 +271,7 @@ section{position:relative;z-index:1;padding-block:56px}
       </article>
 
       <ul class="lots">
-        <li class="lot"><div class="ico c-pink" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="13" r="7"/><circle cx="10" cy="13" r="3.5"/><path d="M17 13h5"/></svg></div><div><h3>Crêpière Pancake party</h3><p class="by">Arthur Martin, 1500 W, 6 mini-crêpes</p></div></li>
+        <li class="lot photo-lot"><img src="img/crepiere.jpg" alt="Crêpière Pancake party Arthur Martin, 6 mini-crêpes" width="800" height="340" loading="lazy"><div class="lot-body"><div class="ico c-pink" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="13" r="7"/><circle cx="10" cy="13" r="3.5"/><path d="M17 13h5"/></svg></div><div><h3>Crêpière Pancake party</h3><p class="by">Arthur Martin, 1500 W, 6 mini-crêpes</p></div></div></li>
         <li class="lot"><div class="ico c-teal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="2.5"/><path d="M12 5.5c0-2 1-3 2.5-3S16 4 14.5 5.8M12 5.5c0-2-1-3-2.5-3S8 4 9.5 5.8M9.6 8.6C7.5 8 6 9 6 10.5s1.8 2 3.8.6M14.4 8.6c2.1-.6 3.6.4 3.6 1.9s-1.8 2-3.8.6M12 10.5V21M12 16c2-2.5 4-2.5 5-2"/></svg></div><div><h3>Bon fleuriste de 30 €</h3><p class="by">L'Orchidée, Villefranche-de-Lauragais</p><p class="note">Fleurs coupées ou plantes, hors jours de fêtes</p></div></li>
         <li class="lot"><div class="ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v8a2 2 0 0 0 2 2v10M5 2v6M9 2v6M17 22V2c-2.2 1.3-3 3.6-3 6v5h3"/></svg></div><div><h3>Bon restaurant de 20 €</h3><p class="by">Le Billot de Léon, Villefranche-de-Lauragais</p></div></li>
         <li class="lot"><div class="ico c-gold" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22 3 5c5.5-3 12.5-3 18 0z"/><circle cx="10" cy="9" r="1.2"/><circle cx="14" cy="12" r="1.2"/><circle cx="11.5" cy="15.5" r="1.2"/></svg></div><div><h3>Bon pizzeria de 20 €</h3><p class="by">Casa da Sylvana, pizzeria et épicerie italienne</p><p class="note">Valable jusqu'au 31/03/2027</p></div></li>
@@ -221,7 +279,7 @@ section{position:relative;z-index:1;padding-block:56px}
         <li class="lot"><div class="ico c-blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5c-1.3 0-2 1.2-2 2.7 0 1.3.7 2.3.7 3.3 0 1.3-2.2 3-2.2 7 0 3 1.2 6 3.5 6s3.5-3 3.5-6c0-4-2.2-5.7-2.2-7 0-1 .7-2 .7-3.3 0-1.5-.7-2.7-2-2.7z"/><circle cx="17.5" cy="16.5" r="4.5"/></svg></div><div><h3>Partie de bowling</h3><p class="by">Bowling Toulouse Montaudran, chaussures incluses</p><span class="qty">2 lots</span><p class="note">En semaine, avant 19h</p></div></li>
         <li class="lot"><div class="ico c-teal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c2-4 7-5 10-3 2 1.4 4 .8 5-1l3 1c-1 3-4 5-8 4.5-2.5-.3-4 .5-5 2.5"/><path d="M6 14.5 4.5 18M10 12.5l-1 4M14 15l1.5 3.5M17 14l2.5 3"/><circle cx="19.5" cy="10.8" r=".6" fill="currentColor"/></svg></div><div><h3>Entrée enfant (−15 ans)</h3><p class="by">La Ferme des Reptiles, La Bastide-de-Sérou</p><span class="qty">3 lots</span></div></li>
         <li class="lot"><div class="ico c-gold" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3c.5 2 0 3.5-1 4.5M16.5 3.5c0 2-.6 3.3-1.6 4.2M13 7.5c-3.5.5-6 3.5-6 7.5 0 1.5.3 3 1 4h7l-1.5-4 2-3c1 1.5 3 2.5 5 1.5-1.5-.3-2.5-1.5-3-3.5-.5-1.7-1.8-2.7-3.5-2.5z"/><path d="M8 19c-2 0-4.5-.5-6-2"/></svg></div><div><h3>Entrée enfant gratuite</h3><p class="by">Le Parc Australien, Carcassonne</p><span class="qty">4 lots</span><p class="note">Avec l'achat d'une entrée adulte</p></div></li>
-        <li class="lot"><div class="ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><circle cx="10" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/></svg></div><div><h3>Coffret de biscuits au miel</h3><p class="by">Yakgwa, biscuits traditionnels coréens, 420 g</p></div></li>
+        <li class="lot photo-lot"><img src="img/biscuits.jpg" alt="Coffret de biscuits traditionnels coréens au miel" width="700" height="410" loading="lazy"><div class="lot-body"><div class="ico c-red" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><circle cx="10" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/></svg></div><div><h3>Coffret de biscuits au miel</h3><p class="by">Yakgwa, biscuits traditionnels coréens, 420 g</p></div></div></li>
         <li class="lot"><div class="ico c-blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></div><div><h3>Semaine découverte sport</h3><p class="by">Gymnasia Villefranche, cours collectifs inclus</p><span class="qty">10 lots</span></div></li>
       </ul>
       <p class="more">27 lots déjà sur la liste, <span>et d'autres arrivent !</span></p>
@@ -271,6 +329,24 @@ section{position:relative;z-index:1;padding-block:56px}
     </div>
   </section>
 
+  <section id="questions">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow">Questions fréquentes</p>
+        <h2>Bon à savoir</h2>
+      </div>
+      <div class="faq">
+        <details><summary>Je ne serai pas là au tirage, est-ce que je peux gagner ?</summary><p>Oui, bien sûr ! Les gagnants absents sont contactés par téléphone ou par e-mail dans les 7 jours, avec les coordonnées laissées à l'achat. Vous avez ensuite 30 jours pour récupérer votre lot.</p></details>
+        <details><summary>Comment je reçois mes tickets ?</summary><p>En ligne, vous recevez un e-mail de confirmation HelloAsso avec vos numéros. Si vous achetez auprès d'un parent de l'association ou par téléphone, on vous remet vos tickets papier.</p></details>
+        <details><summary>HelloAsso me propose une « contribution » : c'est obligatoire ?</summary><p>Non. HelloAsso est gratuit pour les associations et se finance grâce à ce pourboire facultatif. Vous pouvez le modifier ou le mettre à 0 € juste avant de payer : le prix de vos tickets ne change pas.</p></details>
+        <details><summary>Le paiement est-il sécurisé ?</summary><p>Oui. Le paiement passe par HelloAsso, la plateforme de paiement des associations, avec une page sécurisée. Nous ne voyons jamais vos coordonnées bancaires.</p></details>
+        <details><summary>Combien de tickets puis-je prendre ?</summary><p>Autant que vous voulez, à 2 € l'unité. Chaque ticket a son propre numéro et compte pour une chance au tirage.</p></details>
+        <details><summary>Où voir les résultats ?</summary><p>Les numéros gagnants sont annoncés au tirage le mardi 15 décembre, puis publiés sur la page HelloAsso et la page Facebook de l'association.</p></details>
+        <details><summary>Où trouver le règlement ?</summary><p>Le règlement de la tombola est consultable et à accepter avant le paiement, sur la page HelloAsso.</p></details>
+      </div>
+    </div>
+  </section>
+
   <section id="partenaires">
     <div class="wrap">
       <div class="sec-head">
@@ -284,6 +360,11 @@ section{position:relative;z-index:1;padding-block:56px}
   </section>
 </main>
 
+
+<div class="buybar" id="buybar">
+  <span class="bp"><strong>2 €</strong>le ticket</span>
+  <a class="btn" href="#billets">Je prends mes tickets</a>
+</div>
 <footer class="foot">
   <div class="wrap">
     <h2>Tirage mardi 15 décembre</h2>
@@ -294,6 +375,15 @@ section{position:relative;z-index:1;padding-block:56px}
       <span>E-mail : <b>lesptitsrennevillois@gmail.com</b></span>
     </div>
     <p class="small">Organisé par l'association Les P'tits Rennevillois. Le règlement de la tombola est consultable avant le paiement, sur la <a href="https://www.helloasso.com/associations/les-p-tits-rennevillois/evenements/tombola" target="_blank" rel="noopener">page HelloAsso</a>.</p>
+    <div class="share">
+      <p>Faites tourner auprès de vos proches !</p>
+      <div class="share-btns">
+        <a class="sbtn wa" data-share="whatsapp" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.2-.2-.5-.3z"/></svg>WhatsApp</a>
+        <a class="sbtn fb" data-share="facebook" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8.5V6.8c0-.8.5-1 .9-1h2.4V2.1L14 2c-3.6 0-4.4 2.7-4.4 4.4v2.1H7.4v3.8h2.2V22h4.4v-9.7h3l.4-3.8z"/></svg>Facebook</a>
+        <button class="sbtn" type="button" data-share="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Copier le lien</button>
+      </div>
+      <p class="copied" aria-live="polite"></p>
+    </div>
     <p class="credit">Site réalisé par <a href="https://blm-online.fr" target="_blank" rel="noopener">blm-online.fr</a></p>
   </div>
 </footer>
@@ -371,6 +461,35 @@ window.addEventListener('message', function(e){
     var a = e.target.closest && e.target.closest('a.btn, .ha-fallback a');
     if (a) send('click');
   });
+})();
+</script>
+
+<script>
+(function(){
+  var URL_ = 'https://tombola-ptits-rennevillois.vercel.app/';
+  var TEXT = "Grande tombola de Noël des P'tits Rennevillois : plus de 30 lots à gagner, dont une tablette tactile ! 2 € le ticket, tirage le 15 décembre.";
+  document.querySelectorAll('[data-share]').forEach(function(el){
+    var kind = el.getAttribute('data-share');
+    if (kind === 'whatsapp') el.href = 'https://wa.me/?text=' + encodeURIComponent(TEXT + ' ' + URL_ + '?src=whatsapp');
+    if (kind === 'facebook') el.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(URL_ + '?src=facebook');
+    if (kind === 'copy') el.addEventListener('click', function(){
+      var link = URL_ + '?src=lien', msg = el.closest('.share').querySelector('.copied');
+      function done(t){ msg.textContent = t; setTimeout(function(){ msg.textContent = ''; }, 4000); }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(function(){ done('Lien copié, il ne reste plus qu\'à le coller !'); }, function(){ done(link); });
+      } else { done(link); }
+    });
+  });
+  var bar = document.getElementById('buybar');
+  var targets = [document.querySelector('.hero .buy'), document.getElementById('billets'), document.querySelector('.foot')].filter(Boolean);
+  if (bar && 'IntersectionObserver' in window) {
+    var visible = new Set();
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ en.isIntersecting ? visible.add(en.target) : visible.delete(en.target); });
+      bar.classList.toggle('away', visible.size > 0);
+    });
+    targets.forEach(function(t){ io.observe(t); });
+  }
 })();
 </script>
 </body>
