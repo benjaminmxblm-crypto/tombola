@@ -208,15 +208,19 @@ html.intro .hero .count{animation:riseIn .8s 2.4s ease-out both}
 .bus-scene .tape{position:absolute;width:90px;height:26px;background:rgba(242,183,5,.55);top:-10px}
 .bus-scene .t1{left:20px;transform:rotate(-8deg)}.bus-scene .t2{right:20px;transform:rotate(7deg)}
 .bus-scene figcaption{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,26px);color:var(--blue-ink);text-align:center;text-wrap:balance}
-.bus-scene .bus{animation:busTrip 18s infinite}
+.bus-scene .bus{transform-box:view-box;transform-origin:155px 282px;animation:busTrip 18s infinite}
 .bus-scene .walker{animation:board 18s infinite both}
 .bus-scene .walker .walk{animation:step .32s ease-in-out infinite alternate}
 .bus-scene .seat{animation:seated 18s infinite both}
 .bus-scene .pwave{animation:wave .5s ease-in-out infinite alternate}
-@keyframes busTrip{0%{transform:translateX(-340px);animation-timing-function:cubic-bezier(.2,.6,.35,1)}16.7%{transform:translateX(360px)}55%{transform:translateX(360px);animation-timing-function:cubic-bezier(.55,0,.8,.6)}80%{transform:translateX(860px)}100%{transform:translateX(860px)}}
+@keyframes busTrip{0%{transform:translate(-340px,0) rotate(0deg);animation-timing-function:cubic-bezier(.2,.6,.35,1)}16.7%{transform:translate(320px,0) rotate(0deg)}55%{transform:translate(320px,0) rotate(0deg);animation-timing-function:cubic-bezier(.5,0,1,1)}61%{transform:translate(394px,0) rotate(0deg);animation-timing-function:linear}68%{transform:translate(576px,-27px) rotate(-16.7deg);animation-timing-function:linear}82%{transform:translate(880px,-118px) rotate(-16.7deg)}100%{transform:translate(880px,-118px) rotate(-16.7deg)}}
 @keyframes board{0%,17%{transform:translateX(0);opacity:1}27%{transform:translateX(var(--dx));opacity:1}29%,82%{transform:translateX(var(--dx));opacity:0}83%{transform:translateX(0);opacity:0}86%,100%{transform:translateX(0);opacity:1}}
 @keyframes seated{0%,28%{opacity:0}30%,78%{opacity:1}80%,100%{opacity:0}}
 @keyframes step{from{translate:0 0}to{translate:0 -2px}}
+.bus-scene .swing{animation:swingSeat 1.6s ease-in-out infinite alternate}
+.bus-scene .foot-ball{animation:ballKick 3s ease-in-out infinite alternate}
+@keyframes swingSeat{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+@keyframes ballKick{from{transform:translateX(-26px)}to{transform:translateX(20px)}}
 
 .bus-scene .bob{animation:busBob .32s ease-in-out infinite alternate}
 .bus-scene .wheel{transform-box:fill-box;transform-origin:center;animation:spin .7s linear infinite}
@@ -233,7 +237,7 @@ html.intro .hero .count{animation:riseIn .8s 2.4s ease-out both}
 @keyframes puff{from{transform:translate(0,0) scale(.4);opacity:1}to{transform:translate(-26px,-12px) scale(1.4);opacity:0}}
 @keyframes drift{from{transform:translateX(-30px)}50%{transform:translateX(40px)}to{transform:translateX(-30px)}}
 @keyframes flag{from{transform:skewY(-6deg)}to{transform:skewY(6deg)}}
-@media (prefers-reduced-motion:reduce){.bus-scene *{animation:none!important}.bus-scene .bus{transform:translateX(360px)}.bus-scene .walker{opacity:0}}
+@media (prefers-reduced-motion:reduce){.bus-scene *{animation:none!important}.bus-scene .bus{transform:translateX(320px)}.bus-scene .walker{opacity:0}}
 .hero .purpose{margin:12px auto 0;font-family:var(--display);font-weight:700;font-size:clamp(20px,3vw,27px);line-height:1.2;color:var(--ink);text-wrap:balance}
 .hero .purpose span{color:var(--pink);font-weight:800}
 html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
@@ -386,10 +390,24 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       <path d="M631 46q2-3 4 0M645 46q2-3 4 0M631 56q9 7 18 0" fill="none" stroke="#2B2B3A" stroke-width="2.4"/></g>
     <g class="cloud c1"><path d="M360 56q0-16 18-16q6-12 21-9q12-9 25 3q18-2 18 14q0 11-14 11h-55q-13 0-13-3z" fill="#FFFFFF" stroke="#2B2B3A" stroke-width="3"/></g>
     <g class="cloud c2"><path d="M700 34q0-13 15-13q5-10 17-7q10-7 20 3q14-1 14 12q0 8-12 8h-43q-11 0-11-3z" fill="#FFFFFF" stroke="#2B2B3A" stroke-width="3"/></g>
-    <path d="M0 206 Q120 184 260 200 T520 194 T800 190 V218 H0 Z" fill="#9BD27B" stroke="#2B2B3A" stroke-width="3"/>
+    <path d="M0 206 Q120 184 260 200 T560 186 T804 140 V240 H0 Z" fill="#9BD27B" stroke="#2B2B3A" stroke-width="3"/>
     <rect x="404" y="158" width="9" height="52" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="2.5"/>
     <path d="M408 102 q-34 4 -32 32 q-14 22 10 32 q16 12 30 2 q26 8 30 -16 q16 -22 -6 -36 q-6 -18 -32 -14z" fill="#5DAE4F" stroke="#2B2B3A" stroke-width="3"/>
-    <rect x="560" y="168" width="7" height="40" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="2.5"/><circle cx="563" cy="158" r="17" fill="#66BB6A" stroke="#2B2B3A" stroke-width="3"/>
+    
+    <g class="park">
+      <path d="M346 214 Q350 200 372 202 Q380 196 392 200" fill="none" stroke="#4E9A3E" stroke-width="2"/>
+      <path d="M352 214 L364 176 L376 214 M412 214 L424 176 L436 214 M362 180 H426" fill="none" stroke="#C0392B" stroke-width="3"/>
+      <g class="swing" style="transform-origin:388px 180px"><path d="M382 180 V202 M394 180 V202" stroke="#2B2B3A" stroke-width="1.8"/><rect x="379" y="201" width="18" height="4" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.5"/></g>
+      <rect x="442" y="198" width="28" height="5" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="2"/><path d="M444 203 V212 M468 203 V212 M442 198 V190 H470 V198" fill="none" stroke="#2B2B3A" stroke-width="2"/>
+      <circle cx="352" cy="210" r="3" fill="#E8463F"/><circle cx="360" cy="212" r="3" fill="#F2B705"/><circle cx="438" cy="211" r="3" fill="#D1306F"/><circle cx="476" cy="212" r="3" fill="#F2B705"/>
+    </g>
+    <g class="football">
+      <path d="M486 212 L500 180 H624 L638 212 Z" fill="#6DBE4B" stroke="#2B2B3A" stroke-width="2.5"/>
+      <path d="M490 208 L502 184 H622 L634 208 Z M562 184 V208" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+      <ellipse cx="562" cy="196" rx="12" ry="6" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+      <path d="M496 190 V202 L506 202 V190 Z M628 190 V202 L618 202 V190 Z" fill="none" stroke="#2B2B3A" stroke-width="2"/>
+      <circle class="foot-ball" cx="580" cy="200" r="3.5" fill="#FFFFFF" stroke="#2B2B3A" stroke-width="1.5"/>
+    </g>
     <g class="school">
       <path d="M12 154 L34 134 H170 L178 154 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="3"/>
       <path d="M26 141 H174 M20 148 H176" stroke="#7E3F26" stroke-width="2"/>
@@ -413,20 +431,20 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       <path d="M140 112 V120 M226 112 V120" stroke="#2B2B3A" stroke-width="2.5"/>
       <text x="183" y="105" text-anchor="middle" font-family="'Baloo 2','Comic Sans MS',cursive" font-weight="800" font-size="16" fill="#2B2B3A">École de Renneville</text>
     </g>
-    <rect x="-4" y="216" width="808" height="22" fill="#DCD8CC" stroke="#2B2B3A" stroke-width="2.5"/>
+    <rect x="-4" y="216" width="644" height="22" fill="#DCD8CC" stroke="#2B2B3A" stroke-width="2.5"/>
     <g class="parent" style=""><g class="walk"><path d="M57 222 L56 236 M63 222 L64 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="53" y="200" width="14" height="22" rx="3" fill="#E8463F" stroke="#2B2B3A" stroke-width="2.4"/><circle cx="60" cy="192" r="8" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="2.2"/><path d="M52 191 Q56.0 180 60 185 Q64.0 180 68 191" fill="#6B3E1F" stroke="#2B2B3A" stroke-width="1.6"/><path d="M57.5 194.5 Q60 196.5 62.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/><g class="pwave" style="transform-origin:66px 203px"><path d="M66 203 L75 189" stroke="#F5D0A9" stroke-width="3.5" stroke-linecap="round"/><circle cx="76" cy="187" r="3" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="1.6"/></g></g></g>
     <g class="parent" style=""><g class="walk"><path d="M97 222 L96 236 M103 222 L104 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="93" y="200" width="14" height="22" rx="3" fill="#F2B705" stroke="#2B2B3A" stroke-width="2.4"/><circle cx="100" cy="192" r="8" fill="#8D5524" stroke="#2B2B3A" stroke-width="2.2"/><path d="M92 191 Q96.0 180 100 185 Q104.0 180 108 191" fill="#1B1B1B" stroke="#2B2B3A" stroke-width="1.6"/><path d="M97.5 194.5 Q100 196.5 102.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/><g class="pwave" style="transform-origin:106px 203px"><path d="M106 203 L115 189" stroke="#8D5524" stroke-width="3.5" stroke-linecap="round"/><circle cx="116" cy="187" r="3" fill="#8D5524" stroke="#2B2B3A" stroke-width="1.6"/></g></g></g>
     <g class="parent" style=""><g class="walk"><path d="M173 222 L172 236 M179 222 L180 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="169" y="200" width="14" height="22" rx="3" fill="#2B3FB8" stroke="#2B2B3A" stroke-width="2.4"/><circle cx="176" cy="192" r="8" fill="#F1C27D" stroke="#2B2B3A" stroke-width="2.2"/><path d="M168 191 Q172.0 180 176 185 Q180.0 180 184 191" fill="#B5442C" stroke="#2B2B3A" stroke-width="1.6"/><path d="M173.5 194.5 Q176 196.5 178.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/><g class="pwave" style="transform-origin:182px 203px"><path d="M182 203 L191 189" stroke="#F1C27D" stroke-width="3.5" stroke-linecap="round"/><circle cx="192" cy="187" r="3" fill="#F1C27D" stroke="#2B2B3A" stroke-width="1.6"/></g></g></g>
     <g class="parent" style=""><g class="walk"><path d="M219 222 L218 236 M225 222 L226 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="215" y="200" width="14" height="22" rx="3" fill="#138F73" stroke="#2B2B3A" stroke-width="2.4"/><circle cx="222" cy="192" r="8" fill="#D9A066" stroke="#2B2B3A" stroke-width="2.2"/><path d="M214 191 Q218.0 180 222 185 Q226.0 180 230 191" fill="#3B2416" stroke="#2B2B3A" stroke-width="1.6"/><path d="M219.5 194.5 Q222 196.5 224.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/><g class="pwave" style="transform-origin:228px 203px"><path d="M228 203 L237 189" stroke="#D9A066" stroke-width="3.5" stroke-linecap="round"/><circle cx="238" cy="187" r="3" fill="#D9A066" stroke="#2B2B3A" stroke-width="1.6"/></g></g></g>
-    <g class="walker" style="--dx:392px;animation-delay:0.0s"><g class="walk"><path d="M125 228 L124 236 M131 228 L132 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="122" y="213" width="12" height="15" rx="3" fill="#2B3FB8" stroke="#2B2B3A" stroke-width="2.4"/><rect x="123" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="128" cy="206" r="7" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="2.2"/><path d="M121 205 Q124.5 195 128 200 Q131.5 195 135 205" fill="#6B3E1F" stroke="#2B2B3A" stroke-width="1.6"/><path d="M125.5 208.5 Q128 210.5 130.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:370px;animation-delay:0.6s"><g class="walk"><path d="M147 228 L146 236 M153 228 L154 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="144" y="213" width="12" height="15" rx="3" fill="#138F73" stroke="#2B2B3A" stroke-width="2.4"/><rect x="145" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="150" cy="206" r="7" fill="#8D5524" stroke="#2B2B3A" stroke-width="2.2"/><path d="M143 205 Q146.5 195 150 200 Q153.5 195 157 205" fill="#1B1B1B" stroke="#2B2B3A" stroke-width="1.6"/><path d="M147.5 208.5 Q150 210.5 152.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:324px;animation-delay:1.2s"><g class="walk"><path d="M193 228 L192 236 M199 228 L200 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="190" y="213" width="12" height="15" rx="3" fill="#D1306F" stroke="#2B2B3A" stroke-width="2.4"/><rect x="191" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="196" cy="206" r="7" fill="#F1C27D" stroke="#2B2B3A" stroke-width="2.2"/><path d="M189 205 Q192.5 195 196 200 Q199.5 195 203 205" fill="#E0A526" stroke="#2B2B3A" stroke-width="1.6"/><path d="M193.5 208.5 Q196 210.5 198.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:276px;animation-delay:1.8s"><g class="walk"><path d="M241 228 L240 236 M247 228 L248 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="238" y="213" width="12" height="15" rx="3" fill="#F2B705" stroke="#2B2B3A" stroke-width="2.4"/><rect x="239" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="244" cy="206" r="7" fill="#D9A066" stroke="#2B2B3A" stroke-width="2.2"/><path d="M237 205 Q240.5 195 244 200 Q247.5 195 251 205" fill="#3B2416" stroke="#2B2B3A" stroke-width="1.6"/><path d="M241.5 208.5 Q244 210.5 246.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:252px;animation-delay:2.4s"><g class="walk"><path d="M265 228 L264 236 M271 228 L272 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="262" y="213" width="12" height="15" rx="3" fill="#7B4FC9" stroke="#2B2B3A" stroke-width="2.4"/><rect x="263" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="268" cy="206" r="7" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="2.2"/><path d="M261 205 Q264.5 195 268 200 Q271.5 195 275 205" fill="#B5442C" stroke="#2B2B3A" stroke-width="1.6"/><path d="M265.5 208.5 Q268 210.5 270.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:228px;animation-delay:3.0s"><g class="walk"><path d="M289 222 L288 236 M295 222 L296 236" stroke="#2B2B3A" stroke-width="2.6"/><path d="M292 200 L283 222 H301 Z" fill="#2E8B57" stroke="#2B2B3A" stroke-width="2.4"/><rect x="300" y="208" width="9" height="8" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/><circle cx="292" cy="192" r="8" fill="#F1C27D" stroke="#2B2B3A" stroke-width="2.2"/><path d="M284 191 Q288.0 180 292 185 Q296.0 180 300 191" fill="#5A3A22" stroke="#2B2B3A" stroke-width="1.6"/><path d="M289.5 194.5 Q292 196.5 294.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <g class="walker" style="--dx:204px;animation-delay:3.6s"><g class="walk"><path d="M313 222 L312 236 M319 222 L320 236" stroke="#2B2B3A" stroke-width="2.6"/><path d="M316 200 L307 222 H325 Z" fill="#4A63D9" stroke="#2B2B3A" stroke-width="2.4"/><rect x="324" y="208" width="9" height="8" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/><circle cx="316" cy="192" r="8" fill="#D9A066" stroke="#2B2B3A" stroke-width="2.2"/><path d="M308 191 Q312.0 180 316 185 Q320.0 180 324 191" fill="#1B1B1B" stroke="#2B2B3A" stroke-width="1.6"/><path d="M313.5 194.5 Q316 196.5 318.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
-    <rect x="-4" y="238" width="808" height="52" fill="#9A9AA8" stroke="#2B2B3A" stroke-width="3"/>
-    <path d="M10 264 H790" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="26 20"/>
+    <g class="walker" style="--dx:342px;animation-delay:0.0s"><g class="walk"><path d="M125 228 L124 236 M131 228 L132 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="122" y="213" width="12" height="15" rx="3" fill="#2B3FB8" stroke="#2B2B3A" stroke-width="2.4"/><rect x="123" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="128" cy="206" r="7" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="2.2"/><path d="M121 205 Q124.5 195 128 200 Q131.5 195 135 205" fill="#6B3E1F" stroke="#2B2B3A" stroke-width="1.6"/><path d="M125.5 208.5 Q128 210.5 130.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:320px;animation-delay:0.6s"><g class="walk"><path d="M147 228 L146 236 M153 228 L154 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="144" y="213" width="12" height="15" rx="3" fill="#138F73" stroke="#2B2B3A" stroke-width="2.4"/><rect x="145" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="150" cy="206" r="7" fill="#8D5524" stroke="#2B2B3A" stroke-width="2.2"/><path d="M143 205 Q146.5 195 150 200 Q153.5 195 157 205" fill="#1B1B1B" stroke="#2B2B3A" stroke-width="1.6"/><path d="M147.5 208.5 Q150 210.5 152.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:274px;animation-delay:1.2s"><g class="walk"><path d="M193 228 L192 236 M199 228 L200 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="190" y="213" width="12" height="15" rx="3" fill="#D1306F" stroke="#2B2B3A" stroke-width="2.4"/><rect x="191" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="196" cy="206" r="7" fill="#F1C27D" stroke="#2B2B3A" stroke-width="2.2"/><path d="M189 205 Q192.5 195 196 200 Q199.5 195 203 205" fill="#E0A526" stroke="#2B2B3A" stroke-width="1.6"/><path d="M193.5 208.5 Q196 210.5 198.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:226px;animation-delay:1.8s"><g class="walk"><path d="M241 228 L240 236 M247 228 L248 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="238" y="213" width="12" height="15" rx="3" fill="#F2B705" stroke="#2B2B3A" stroke-width="2.4"/><rect x="239" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="244" cy="206" r="7" fill="#D9A066" stroke="#2B2B3A" stroke-width="2.2"/><path d="M237 205 Q240.5 195 244 200 Q247.5 195 251 205" fill="#3B2416" stroke="#2B2B3A" stroke-width="1.6"/><path d="M241.5 208.5 Q244 210.5 246.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:202px;animation-delay:2.4s"><g class="walk"><path d="M265 228 L264 236 M271 228 L272 236" stroke="#2B2B3A" stroke-width="2.6"/><rect x="262" y="213" width="12" height="15" rx="3" fill="#7B4FC9" stroke="#2B2B3A" stroke-width="2.4"/><rect x="263" y="215" width="10" height="9" rx="2" fill="#E8463F" stroke="#2B2B3A" stroke-width="1.6"/><circle cx="268" cy="206" r="7" fill="#F5D0A9" stroke="#2B2B3A" stroke-width="2.2"/><path d="M261 205 Q264.5 195 268 200 Q271.5 195 275 205" fill="#B5442C" stroke="#2B2B3A" stroke-width="1.6"/><path d="M265.5 208.5 Q268 210.5 270.5 208.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:178px;animation-delay:3.0s"><g class="walk"><path d="M289 222 L288 236 M295 222 L296 236" stroke="#2B2B3A" stroke-width="2.6"/><path d="M292 200 L283 222 H301 Z" fill="#2E8B57" stroke="#2B2B3A" stroke-width="2.4"/><rect x="300" y="208" width="9" height="8" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/><circle cx="292" cy="192" r="8" fill="#F1C27D" stroke="#2B2B3A" stroke-width="2.2"/><path d="M284 191 Q288.0 180 292 185 Q296.0 180 300 191" fill="#5A3A22" stroke="#2B2B3A" stroke-width="1.6"/><path d="M289.5 194.5 Q292 196.5 294.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <g class="walker" style="--dx:154px;animation-delay:3.6s"><g class="walk"><path d="M313 222 L312 236 M319 222 L320 236" stroke="#2B2B3A" stroke-width="2.6"/><path d="M316 200 L307 222 H325 Z" fill="#4A63D9" stroke="#2B2B3A" stroke-width="2.4"/><rect x="324" y="208" width="9" height="8" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/><circle cx="316" cy="192" r="8" fill="#D9A066" stroke="#2B2B3A" stroke-width="2.2"/><path d="M308 191 Q312.0 180 316 185 Q320.0 180 324 191" fill="#1B1B1B" stroke="#2B2B3A" stroke-width="1.6"/><path d="M313.5 194.5 Q316 196.5 318.5 194.5" fill="none" stroke="#2B2B3A" stroke-width="1.5"/></g></g>
+    <path d="M-4 238 H640 L804 189 V241 L640 290 H-4 Z" fill="#9A9AA8" stroke="#2B2B3A" stroke-width="3"/>
+    <path d="M10 264 H640 L800 216" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="26 20"/>
     <g class="bus"><g class="bob" transform="translate(0 148)">
       <g class="puffs"><circle class="puff p1" cx="-14" cy="98" r="9" fill="#E3E3EA" stroke="#2B2B3A" stroke-width="2"/><circle class="puff p2" cx="-30" cy="92" r="12" fill="#E3E3EA" stroke="#2B2B3A" stroke-width="2"/></g>
       <path d="M4 18 Q4 0 22 0 H262 Q284 0 292 22 L306 60 Q310 70 310 82 V104 Q310 112 302 112 H10 Q4 112 4 104 Z" fill="#F2B705" stroke="#2B2B3A" stroke-width="3.5"/>
@@ -439,16 +457,18 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       <g class="wheel"><circle cx="64" cy="114" r="20" fill="#2B2B3A"/><circle cx="64" cy="114" r="8" fill="#C9CAD6" stroke="#2B2B3A" stroke-width="2"/><path d="M64 98 V130 M48 114 H80" stroke="#C9CAD6" stroke-width="2.5"/></g>
       <g class="wheel"><circle cx="246" cy="114" r="20" fill="#2B2B3A"/><circle cx="246" cy="114" r="8" fill="#C9CAD6" stroke="#2B2B3A" stroke-width="2"/><path d="M246 98 V130 M230 114 H262" stroke="#C9CAD6" stroke-width="2.5"/></g>
     </g></g>
-    <path d="M-4 290 H804 V334 H-4 Z" fill="#9BD27B" stroke="#2B2B3A" stroke-width="3"/>
+    <path d="M-4 290 H640 L804 241 V334 H-4 Z" fill="#9BD27B" stroke="#2B2B3A" stroke-width="3"/>
+    <path d="M560 334 Q660 262 804 250 V334 Z" fill="#86C46A" stroke="#2B2B3A" stroke-width="3"/>
     <g class="church">
-      <rect x="640" y="276" width="96" height="58" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M634 278 L688 252 L742 278 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
-      <rect x="732" y="214" width="34" height="120" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M727 216 L749 176 L771 216 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M749 176 V160 M742 166 H756" stroke="#2B2B3A" stroke-width="3"/>
-      <rect x="742" y="232" width="14" height="22" rx="7" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
-      <rect x="674" y="300" width="22" height="34" rx="11" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2.4"/>
+      <rect x="652" y="262" width="80" height="52" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M646 264 L692 240 L738 264 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
+      <rect x="728" y="196" width="34" height="118" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M723 198 L745 156 L767 198 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M745 156 V140 M738 146 H752" stroke="#2B2B3A" stroke-width="3"/>
+      <rect x="738" y="214" width="14" height="22" rx="7" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
+      <rect x="681" y="284" width="22" height="30" rx="11" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2.4"/>
     </g>
+    <path d="M640 318 Q700 300 800 300 V334 H630 Z" fill="#86C46A"/>
     <rect x="80" y="300" width="7" height="30" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="2.5"/><circle cx="83" cy="292" r="15" fill="#4CAF50" stroke="#2B2B3A" stroke-width="3"/>
   </g></g>
 </svg>
