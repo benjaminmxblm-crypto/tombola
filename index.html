@@ -220,7 +220,7 @@ html.intro .hero .count{animation:riseIn .8s 2.4s ease-out both}
 .bus-scene .swing{animation:swingSeat 1.6s ease-in-out infinite alternate}
 .bus-scene .foot-ball{animation:ballKick 3s ease-in-out infinite alternate}
 @keyframes swingSeat{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
-@keyframes ballKick{from{transform:translateX(-26px)}to{transform:translateX(20px)}}
+@keyframes ballKick{from{transform:translate(-3px,-20px)}to{transform:translate(4px,14px)}}
 
 .bus-scene .bob{animation:busBob .32s ease-in-out infinite alternate}
 .bus-scene .wheel{transform-box:fill-box;transform-origin:center;animation:spin .7s linear infinite}
@@ -402,11 +402,22 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       <circle cx="352" cy="210" r="3" fill="#E8463F"/><circle cx="360" cy="212" r="3" fill="#F2B705"/><circle cx="438" cy="211" r="3" fill="#D1306F"/><circle cx="476" cy="212" r="3" fill="#F2B705"/>
     </g>
     <g class="football">
-      <path d="M486 212 L500 180 H624 L638 212 Z" fill="#6DBE4B" stroke="#2B2B3A" stroke-width="2.5"/>
-      <path d="M490 208 L502 184 H622 L634 208 Z M562 184 V208" fill="none" stroke="#FFFFFF" stroke-width="2"/>
-      <ellipse cx="562" cy="196" rx="12" ry="6" fill="none" stroke="#FFFFFF" stroke-width="2"/>
-      <path d="M496 190 V202 L506 202 V190 Z M628 190 V202 L618 202 V190 Z" fill="none" stroke="#2B2B3A" stroke-width="2"/>
-      <circle class="foot-ball" cx="580" cy="200" r="3.5" fill="#FFFFFF" stroke="#2B2B3A" stroke-width="1.5"/>
+      <path d="M520 150 H584 L600 212 H504 Z" fill="#6DBE4B" stroke="#2B2B3A" stroke-width="2.5"/>
+      <path d="M523 154 H581 L595 208 H509 Z M515 181 H589" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+      <ellipse cx="552" cy="181" rx="11" ry="4" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+      <path d="M543 154 V147 H561 V154" fill="none" stroke="#2B2B3A" stroke-width="2"/>
+      <path d="M538 208 V198 H566 V208" fill="none" stroke="#2B2B3A" stroke-width="2.2"/>
+      <circle class="foot-ball" cx="552" cy="186" r="3.5" fill="#FFFFFF" stroke="#2B2B3A" stroke-width="1.5"/>
+    </g>
+    <g class="townhouses">
+      <rect x="606" y="164" width="34" height="50" fill="#F3E2B8" stroke="#2B2B3A" stroke-width="2.5"/><path d="M603 166 L623 148 L643 166 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="612" y="174" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="626" y="174" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="617" y="196" width="11" height="18" fill="#2E8B57" stroke="#2B2B3A" stroke-width="1.8"/>
+      <rect x="640" y="156" width="34" height="58" fill="#E9B8A4" stroke="#2B2B3A" stroke-width="2.5"/><path d="M637 158 L657 140 L677 158 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="646" y="166" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="660" y="166" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="646" y="184" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="660" y="184" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/>
+      <rect x="674" y="160" width="32" height="50" fill="#F6D27A" stroke="#2B2B3A" stroke-width="2.5"/><path d="M671 162 L690 146 L709 162 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="680" y="170" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="692" y="170" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="684" y="190" width="11" height="20" fill="#2B3FB8" stroke="#2B2B3A" stroke-width="1.8"/>
+      <rect x="706" y="150" width="34" height="52" fill="#D9E3C4" stroke="#2B2B3A" stroke-width="2.5"/><path d="M703 152 L723 134 L743 152 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="712" y="160" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="726" y="160" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="716" y="182" width="11" height="20" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/>
     </g>
     <g class="school">
       <path d="M12 154 L34 134 H170 L178 154 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="3"/>
@@ -458,17 +469,29 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       <g class="wheel"><circle cx="246" cy="114" r="20" fill="#2B2B3A"/><circle cx="246" cy="114" r="8" fill="#C9CAD6" stroke="#2B2B3A" stroke-width="2"/><path d="M246 98 V130 M230 114 H262" stroke="#C9CAD6" stroke-width="2.5"/></g>
     </g></g>
     <path d="M-4 290 H640 L804 241 V334 H-4 Z" fill="#9BD27B" stroke="#2B2B3A" stroke-width="3"/>
-    <path d="M560 334 Q660 262 804 250 V334 Z" fill="#86C46A" stroke="#2B2B3A" stroke-width="3"/>
-    <g class="church">
-      <rect x="652" y="262" width="80" height="52" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M646 264 L692 240 L738 264 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
-      <rect x="728" y="196" width="34" height="118" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M723 198 L745 156 L767 198 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
-      <path d="M745 156 V140 M738 146 H752" stroke="#2B2B3A" stroke-width="3"/>
-      <rect x="738" y="214" width="14" height="22" rx="7" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
-      <rect x="681" y="284" width="22" height="30" rx="11" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2.4"/>
+    <path d="M500 334 Q620 258 804 246 V334 Z" fill="#86C46A" stroke="#2B2B3A" stroke-width="3"/>
+    <g class="village">
+      <rect x="540" y="296" width="44" height="38" fill="#F3E2B8" stroke="#2B2B3A" stroke-width="2.5"/><path d="M535 298 L562 278 L589 298 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="548" y="306" width="10" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="566" y="312" width="11" height="22" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="1.8"/>
+      <rect x="584" y="290" width="36" height="44" fill="#E9B8A4" stroke="#2B2B3A" stroke-width="2.5"/><path d="M580 292 L602 274 L624 292 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="592" y="300" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/><rect x="606" y="300" width="9" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/>
     </g>
-    <path d="M640 318 Q700 300 800 300 V334 H630 Z" fill="#86C46A"/>
+    <g class="church">
+      <rect x="622" y="256" width="104" height="78" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M614 258 L674 222 L734 258 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
+      <rect x="640" y="272" width="14" height="24" rx="7" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/><rect x="694" y="272" width="14" height="24" rx="7" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
+      <rect x="662" y="298" width="26" height="36" rx="13" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2.4"/>
+      <rect x="722" y="168" width="54" height="166" fill="#B5533C" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M716 170 L749 112 L782 170 Z" fill="#9C4430" stroke="#2B2B3A" stroke-width="3"/>
+      <path d="M749 112 V90 M739 99 H759" stroke="#2B2B3A" stroke-width="3.5"/>
+      <rect x="738" y="186" width="22" height="32" rx="11" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
+      <path d="M722 230 H776 M722 236 H776" stroke="#8E3A27" stroke-width="2"/>
+      <rect x="740" y="252" width="18" height="26" rx="9" fill="#5A2A1C" stroke="#2B2B3A" stroke-width="2"/>
+    </g>
+    <g class="village">
+      <rect x="776" y="282" width="40" height="52" fill="#F6D27A" stroke="#2B2B3A" stroke-width="2.5"/><path d="M772 284 L796 264 L820 284 Z" fill="#A65A3A" stroke="#2B2B3A" stroke-width="2.5"/>
+      <rect x="784" y="294" width="10" height="10" fill="#BFE6FF" stroke="#2B2B3A" stroke-width="1.8"/>
+    </g>
     <rect x="80" y="300" width="7" height="30" fill="#8B5A2B" stroke="#2B2B3A" stroke-width="2.5"/><circle cx="83" cy="292" r="15" fill="#4CAF50" stroke="#2B2B3A" stroke-width="3"/>
   </g></g>
 </svg>
