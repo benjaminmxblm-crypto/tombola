@@ -97,9 +97,12 @@ section{position:relative;z-index:1;padding-block:56px}
 .jackpot h3{font-size:clamp(34px,5vw,48px);font-weight:800;line-height:1;margin-top:6px}
 .jackpot p{margin:6px 0 0;font-weight:700;color:#DDE3FA}
 .jackpot .star{position:absolute;right:26px;top:18px;width:46px;height:46px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+/* Gros lots : framboise */
+.jackpot{background:linear-gradient(150deg,#C42D68,#8E1D4A)}
+.jackpot p{color:#FCE4EE}
 .podium{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-bottom:20px}
 .jackpot.small{grid-template-columns:1fr;align-items:start;gap:16px;padding:20px 22px 24px;margin-bottom:0}
-.jackpot.small .photo{aspect-ratio:16/9;object-fit:cover;border-radius:16px}
+.jackpot.small .photo{aspect-ratio:4/3;object-fit:cover;border-radius:16px}
 .jackpot.small h3{font-size:clamp(26px,3.2vw,34px)}
 .jackpot.small p{font-size:16px}
 @media (max-width:760px){.podium{grid-template-columns:1fr;gap:14px}}
@@ -579,7 +582,7 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
       </article>
       <div class="podium">
         <article class="jackpot small">
-          <img class="photo" src="img/tassimo.jpg" alt="Machine à café Bosch Tassimo Happy" width="498" height="415" loading="lazy" style="object-position:72% 35%">
+          <img class="photo" src="img/tassimo.jpg?v=2" alt="Machine à café Bosch Tassimo Happy" width="470" height="440" loading="lazy">
           <div><span class="tag">2e gros lot</span><h3>Machine à café Tassimo</h3><p>Bosch Tassimo Happy, pour les cafés, thés et chocolats chauds à dosettes.</p></div>
         </article>
         <article class="jackpot small">
