@@ -260,17 +260,16 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
 .tk-num{font-family:var(--display);font-weight:800;font-size:28px;line-height:1}
 .tk-num b{font-variant-numeric:tabular-nums;font-weight:800;display:inline-block;min-width:4ch}
 .tk-date{font-size:12px;font-weight:700;opacity:.9}
-.tk-fan{position:relative;height:150px;max-width:640px;margin:-6px auto 34px}
-.tk-s{position:absolute;left:50%;top:22px;height:78px;margin-left:-110px;transition:transform .8s cubic-bezier(.3,1.4,.6,1)}
+.tk-fan{display:flex;flex-wrap:wrap;justify-content:center;gap:22px 26px;margin:0 auto 38px;padding-top:6px}
+.tk-s{height:78px;transform:rotate(var(--r))}
+.tk-s:hover{transform:rotate(0deg) scale(1.05)}
 .tk-s .tk-stub strong{font-size:30px}.tk-s .tk-num{font-size:22px}
-.tk-s.f1{--tk-bg:#2B3FB8;transform:rotate(-4deg);z-index:1}.tk-s.f2{--tk-bg:#138F73;transform:rotate(-2deg);z-index:3}.tk-s.f3{transform:rotate(0deg);z-index:2}
-.tk-fan.open .f1{transform:translate(-150px,18px) rotate(-12deg)}
-.tk-fan.open .f2{transform:translate(0,-8px) rotate(-1deg)}
-.tk-fan.open .f3{transform:translate(150px,18px) rotate(11deg)}
-.tk-fan.open{animation:fanFloat 3.5s 1s ease-in-out infinite alternate}
-@keyframes fanFloat{from{transform:translateY(0)}to{transform:translateY(-6px)}}
-@media (max-width:640px){.tk-fan{transform:scale(.62);margin-bottom:10px}.tk-fan.open{animation:none}}
-@media (prefers-reduced-motion:reduce){.tk,.tk-s{transition:none}.tk-fan.open{animation:none}}
+.tk-s.f1{--tk-bg:#2B3FB8;--r:-3deg}.tk-s.f2{--tk-bg:#138F73;--r:2deg}.tk-s.f3{--r:-2deg}
+.tk-fan.open .tk-s{animation:dealIn .7s cubic-bezier(.3,1.5,.6,1) both,tkFloat 3.2s ease-in-out infinite alternate}
+.tk-fan.open .f1{animation-delay:0s,.8s}.tk-fan.open .f2{animation-delay:.15s,1.4s}.tk-fan.open .f3{animation-delay:.3s,1.1s}
+@keyframes dealIn{0%{transform:translateY(26px) rotate(calc(var(--r) * -3))}100%{transform:translateY(0) rotate(var(--r))}}
+@keyframes tkFloat{from{translate:0 0}to{translate:0 -5px}}
+@media (prefers-reduced-motion:reduce){.tk,.tk-s{transition:none}.tk-fan.open .tk-s{animation:none}}
 .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 .faq details{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:0 18px}
 .faq summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:800;font-size:17px;position:relative}
