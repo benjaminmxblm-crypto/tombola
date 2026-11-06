@@ -1100,7 +1100,9 @@ window.addEventListener('message', function(e){
   }
   // poursuit la boule qui tombe du sapin, si le chien est libre à ce moment-là
   addEventListener('tombola-ball', function(){ if (!busy) setTimeout(function(){ run(true); }, 250); });
-  later(rnd(6500, 11000));
+  // premier passage seulement après l'ouverture (la boule tombe ~4 s après), pour qu'il ne passe jamais avant elle
+  function begin(){ later(rnd(12000, 16000)); }
+  if (document.documentElement.classList.contains('intro')) begin(); else addEventListener('tombola-intro', begin, { once: true });
 })();
 </script>
 </body>
