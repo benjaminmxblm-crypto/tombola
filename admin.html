@@ -93,13 +93,17 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
         <div class="tile"><p class="label">En ligne (HelloAsso)</p><p class="value" id="k-online">–</p><p class="sub" id="k-online-sub">&nbsp;</p></div>
         <div class="tile"><p class="label">Papier</p><p class="value" id="k-paper">–</p><p class="sub">saisi à la main</p></div>
         <div class="tile"><p class="label">Total</p><p class="value" id="k-total">–</p><p class="sub" id="k-total-sub">&nbsp;</p></div>
-        <form class="paper" id="paper-form">
-          <label for="paper-n">Tickets papier vendus</label>
-          <div class="row"><input id="paper-n" type="number" min="0" max="100000" inputmode="numeric" required><button class="primary" type="submit">Enregistrer</button></div>
+        <form class="paper" id="add-form">
+          <label for="add-n">Nouvelle vente papier</label>
+          <div class="row"><input id="add-n" type="number" min="1" max="1000" inputmode="numeric" placeholder="ex. 5" required><button class="primary" type="submit">Ajouter</button></div>
         </form>
       </div>
+      <form class="paper" id="paper-form" style="margin-top:12px">
+        <label for="paper-n">Corriger le total papier (sans notification sur le site)</label>
+        <div class="row"><input id="paper-n" type="number" min="0" max="100000" inputmode="numeric" required><button type="submit">Corriger</button></div>
+      </form>
       <div class="prog"><span id="k-prog" style="width:0"></span></div>
-      <p class="note" id="k-note" style="margin-top:10px">Le compteur s'affiche sur le site à partir de 50 tickets vendus. Les ventes HelloAsso se mettent à jour toutes les 2 minutes environ.</p>
+      <p class="note" id="k-note" style="margin-top:10px">Le compteur s'affiche sur le site à partir de 50 tickets vendus. Chaque vente (HelloAsso ou « Ajouter ») fait apparaître une petite bulle anonyme sur le site, du type « Quelqu'un vient de prendre 3 tickets ». Les ventes HelloAsso sont relevées environ chaque minute.</p>
     </section>
 
     <div class="tiles">
@@ -165,6 +169,14 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
       $('k-prog').style.width = Math.min(100, d.total / d.goal * 100) + '%';
     } catch(e) { $('k-online-sub').textContent = 'compteur indisponible'; }
   }
+
+  $('add-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var r = await fetch('/api/tickets', { method: 'POST', headers: { 'x-admin-password': getPwd(), 'Content-Type': 'application/json' }, body: JSON.stringify({ add: Number($('add-n').value) }) });
+    var d = await r.json().catch(function(){ return {}; });
+    if (!r.ok) { show(d.error || 'Ajout impossible.', $('dash-err')); return; }
+    show('', $('dash-err')); $('add-n').value = ''; loadTickets();
+  });
 
   $('paper-form').addEventListener('submit', async function(e){
     e.preventDefault();

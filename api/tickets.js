@@ -1,6 +1,9 @@
 // Compteur de tickets vendus.
-// GET  : public, renvoie { online, paper, total, goal } (tickets HelloAsso + tickets papier).
-// POST : réservé à l'admin (en-tête x-admin-password), enregistre le nombre de tickets papier vendus.
+// GET  : public, renvoie { online, paper, total, goal, events } (tickets HelloAsso + tickets papier).
+//        events = les dernières ventes réelles (anonymes) : { n, src: 'online' | 'paper', at }.
+// POST : réservé à l'admin (en-tête x-admin-password) :
+//        { add: n }   ajoute n tickets papier vendus (crée une notification « vente papier ») ;
+//        { paper: n } corrige le total papier (sans notification).
 //
 // Variables d'environnement Vercel :
 //   HELLOASSO_CLIENT_ID / HELLOASSO_CLIENT_SECRET  (HelloAsso > Mon compte > Intégrations et API)
@@ -13,7 +16,8 @@ const FORM_TYPE = 'Event';
 const FORM_SLUG = 'tombola';
 const PRICE_CENTS = 200;
 const GOAL = 4000;
-const CACHE_SECONDS = 120; // on n'interroge HelloAsso qu'une fois toutes les 2 minutes au plus
+const CACHE_SECONDS = 60; // on n'interroge HelloAsso qu'une fois par minute au plus
+const EVENTS_KEEP = 20;
 
 function okPassword(given) {
   const expected = process.env.ADMIN_PASSWORD || '';
@@ -57,7 +61,16 @@ module.exports = async (req, res) => {
     if (!configured()) { res.status(503).json({ error: "La base de données n'est pas connectée." }); return; }
     let body = req.body;
     if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = {}; } }
-    const paper = Math.floor(Number(body && body.paper));
+    body = body || {};
+    if (body.add !== undefined) {
+      const add = Math.floor(Number(body.add));
+      if (!Number.isFinite(add) || add < 1 || add > 1000) { res.status(400).json({ error: 'Nombre invalide.' }); return; }
+      const ev = JSON.stringify({ n: add, src: 'paper', at: Date.now() });
+      const [paper] = await pipeline([['INCRBY', 'tickets:paper', add], ['LPUSH', 'tickets:events', ev], ['LTRIM', 'tickets:events', 0, EVENTS_KEEP - 1]]);
+      res.status(200).json({ ok: true, paper: Number(paper) });
+      return;
+    }
+    const paper = Math.floor(Number(body.paper));
     if (!Number.isFinite(paper) || paper < 0 || paper > 100000) { res.status(400).json({ error: 'Nombre invalide.' }); return; }
     await pipeline([['SET', 'tickets:paper', paper]]);
     res.status(200).json({ ok: true, paper });
@@ -65,17 +78,27 @@ module.exports = async (req, res) => {
   }
 
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
-  let online = null, paper = 0, error = null;
+  res.setHeader('Cache-Control', 'public, s-maxage=15, stale-while-revalidate=60');
+  let online = null, paper = 0, error = null, events = [];
   try {
     if (configured()) {
-      const [cached, p] = await pipeline([['GET', 'tickets:online'], ['GET', 'tickets:paper']]);
+      const [cached, p, evs] = await pipeline([['GET', 'tickets:online'], ['GET', 'tickets:paper'], ['LRANGE', 'tickets:events', 0, 9]]);
       paper = Number(p) || 0;
+      events = (evs || []).map((e) => { try { return JSON.parse(e); } catch (x) { return null; } }).filter(Boolean);
       if (cached !== null && cached !== undefined) online = Number(cached);
     }
     if (online === null) {
       online = await helloAssoCount();
-      if (online !== null && configured()) await pipeline([['SET', 'tickets:online', online, 'EX', CACHE_SECONDS]]);
+      if (online !== null && configured()) {
+        // nouvelle(s) vente(s) en ligne depuis la dernière fois → une notification
+        const [last] = await pipeline([['GETSET', 'tickets:online:last', online], ['SET', 'tickets:online', online, 'EX', CACHE_SECONDS]]);
+        const diff = last === null || last === undefined ? 0 : online - Number(last);
+        if (diff > 0) {
+          const ev = { n: diff, src: 'online', at: Date.now() };
+          await pipeline([['LPUSH', 'tickets:events', JSON.stringify(ev)], ['LTRIM', 'tickets:events', 0, EVENTS_KEEP - 1]]);
+          events.unshift(ev);
+        }
+      }
     }
   } catch (e) {
     error = 'HelloAsso indisponible';
@@ -86,6 +109,7 @@ module.exports = async (req, res) => {
     total: (online || 0) + paper,
     goal: GOAL,
     helloasso: online !== null,
+    events: events.slice(0, 10),
     error,
   });
 };
