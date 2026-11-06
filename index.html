@@ -999,7 +999,8 @@ window.addEventListener('message', function(e){
 .dog-run .flip{width:100%;height:100%}
 .dog-run.left .flip{transform:scaleX(-1)}
 .dog-run svg{width:100%;height:100%;overflow:visible;display:block}
-.dog-run .hop{width:100%;height:100%}
+.dog-run .hop{width:100%;height:100%;transform-origin:50% 92%}
+.dog-shadow{position:absolute;left:18%;bottom:1.5%;width:62%;height:5%;border-radius:50%;background:rgba(27,27,58,.13)}
 .dog-run .body{animation:dogBob .22s ease-in-out infinite alternate}
 .dog-run .leg{transform-box:fill-box;transform-origin:50% 0;animation:dogLeg .22s ease-in-out infinite alternate}
 .dog-run .leg.b{animation-direction:alternate-reverse}
@@ -1014,8 +1015,10 @@ window.addEventListener('message', function(e){
 /* aboie : tête levée */
 .dog-run.bark .head{transform:rotate(-12deg)}
 /* saut : pattes repliées */
-.dog-run.jump .leg{animation:none;transform:rotate(-38deg)}
-.dog-run.jump .leg.b{transform:rotate(38deg)}
+.dog-run.jump .leg,.dog-run.jump .body{animation:none}
+.dog-run .leg{transition:transform .12s ease-out}
+.dog-run.jump.air .leg.fl{transform:rotate(-58deg)}
+.dog-run.jump.air .leg.bl{transform:rotate(62deg)}
 /* pipi : patte arrière levée, petit filet jaune */
 .dog-run.pee .leg,.dog-run.pee .body,.dog-run.pee .ear{animation:none}
 .dog-run.pee .leg.hind{transform:rotate(62deg)}
@@ -1038,11 +1041,11 @@ window.addEventListener('message', function(e){
 @media (prefers-reduced-motion:reduce){.dog-run{display:none}}
 </style>
 <div class="dog-run" aria-hidden="true">
+<span class="dog-shadow"></span>
 <div class="hop"><div class="flip">
 <svg viewBox="0 0 110 70">
-  <ellipse class="shadow" cx="54" cy="66" rx="34" ry="3" fill="rgba(27,27,58,.12)"/>
-  <rect class="leg b" x="33" y="44" width="7" height="17" rx="3.5" fill="#C8955F"/>
-  <rect class="leg" x="64" y="44" width="7" height="17" rx="3.5" fill="#C8955F"/>
+  <rect class="leg b bl" x="33" y="44" width="7" height="17" rx="3.5" fill="#C8955F"/>
+  <rect class="leg fl" x="64" y="44" width="7" height="17" rx="3.5" fill="#C8955F"/>
   <g class="body">
     <path class="tail" d="M29 34 q-10 -4 -12 -16 q6 4 14 12z" fill="#E3B27A" stroke="#A8713F" stroke-width="1.4" stroke-linejoin="round"/>
     <ellipse cx="52" cy="38" rx="26" ry="13" fill="#E3B27A" stroke="#A8713F" stroke-width="1.6"/>
@@ -1060,8 +1063,8 @@ window.addEventListener('message', function(e){
     <circle cx="77" cy="41" r="2.8" fill="#F2B705" stroke="#B88400" stroke-width="1"/>
   </g>
   <path class="stream" d="M36 52 q-10 2 -13 13" fill="none" stroke="#F2C428" stroke-width="2.2" stroke-linecap="round"/>
-  <rect class="leg hind" x="38" y="44" width="7.5" height="18" rx="3.75" fill="#E3B27A" stroke="#A8713F" stroke-width="1.3"/>
-  <rect class="leg b" x="69" y="44" width="7.5" height="18" rx="3.75" fill="#E3B27A" stroke="#A8713F" stroke-width="1.3"/>
+  <rect class="leg hind bl" x="38" y="44" width="7.5" height="18" rx="3.75" fill="#E3B27A" stroke="#A8713F" stroke-width="1.3"/>
+  <rect class="leg b fl" x="69" y="44" width="7.5" height="18" rx="3.75" fill="#E3B27A" stroke="#A8713F" stroke-width="1.3"/>
 </svg>
 </div></div>
 </div>
@@ -1069,17 +1072,31 @@ window.addEventListener('message', function(e){
 (function(){
   var dog = document.querySelector('.dog-run');
   if (!dog || !dog.animate || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-  var hop = dog.querySelector('.hop');
+  var hop = dog.querySelector('.hop'), shadow = dog.querySelector('.dog-shadow');
   function rnd(a, b){ return a + Math.random() * (b - a); }
   function pick(list){ return list[Math.floor(Math.random() * list.length)]; }
   function say(){}
   function jump(n){
-    var h = dog.offsetHeight * rnd(.5, .9), frames = [];
-    for (var i = 0; i < n; i++) frames.push({ transform: 'translateY(0)', offset: i / n }, { transform: 'translateY(' + (-h) + 'px)', offset: (i + .5) / n, easing: 'ease-in' });
-    frames.push({ transform: 'translateY(0)', offset: 1 });
-    frames[0].easing = 'ease-out';
+    // saut réaliste : appel (accroupi), impulsion (étiré, nez en l'air), vol en arc, réception (amorti)
+    var s = dog.classList.contains('left') ? 1 : -1, H = dog.offsetHeight, i = 0;
     dog.classList.add('jump');
-    hop.animate(frames, { duration: 420 * n, easing: 'ease-out' }).onfinish = function(){ dog.classList.remove('jump'); };
+    (function one(){
+      var h = H * rnd(.65, 1.05), d = rnd(620, 760);
+      dog.classList.remove('air');
+      var a = hop.animate([
+        { transform: 'translateY(0) rotate(0) scale(1,1)', easing: 'ease-in' },
+        { transform: 'translateY(0) rotate(' + (-s * 3) + 'deg) scale(1.08,.84)', offset: .14, easing: 'cubic-bezier(.2,.7,.4,1)' },
+        { transform: 'translateY(' + (-h * .3) + 'px) rotate(' + (s * 16) + 'deg) scale(.94,1.1)', offset: .26, easing: 'cubic-bezier(.25,.6,.5,1)' },
+        { transform: 'translateY(' + (-h) + 'px) rotate(' + (s * 2) + 'deg) scale(1,1)', offset: .52, easing: 'cubic-bezier(.5,0,.75,.4)' },
+        { transform: 'translateY(' + (-h * .3) + 'px) rotate(' + (-s * 12) + 'deg) scale(.98,1.04)', offset: .78, easing: 'cubic-bezier(.5,0,1,.6)' },
+        { transform: 'translateY(0) rotate(' + (-s * 3) + 'deg) scale(1.1,.86)', offset: .88, easing: 'ease-out' },
+        { transform: 'translateY(0) rotate(0) scale(1,1)' }
+      ], { duration: d });
+      shadow.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.1,1)', opacity: 1, offset: .14 }, { transform: 'scale(.55)', opacity: .45, offset: .52 }, { transform: 'scale(1)', opacity: 1, offset: .88 }, { transform: 'scale(1)', opacity: 1 }], { duration: d });
+      setTimeout(function(){ dog.classList.add('air'); }, d * .2);
+      setTimeout(function(){ dog.classList.remove('air'); }, d * .84);
+      a.onfinish = function(){ if (++i < n) one(); else dog.classList.remove('jump', 'air'); };
+    })();
   }
   var busy = false, timer = null;
   function later(ms){ clearTimeout(timer); timer = setTimeout(function(){ run(false); }, ms); }
