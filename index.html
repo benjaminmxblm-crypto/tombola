@@ -1168,7 +1168,10 @@ window.addEventListener('message', function(e){
     (function f(t){ var k = Math.min(1, (t - t0) / d); k = 1 - Math.pow(1 - k, 3);
       n.textContent = fmt.format(Math.round(from + (to - from) * k)); if (k < 1) requestAnimationFrame(f); else shown = to; })(t0);
   }
+  // COMPTEUR FICTIF pour la démo : à remettre à null avant le lancement pour afficher les vraies ventes.
+  var DEMO = 1243;
   function load(){
+    if (DEMO !== null) { box.hidden = false; if (shown !== DEMO) count(DEMO); return; }
     fetch(base + '/api/tickets').then(function(r){ return r.json(); }).then(function(d){
       if (!d || !(d.total >= MIN)) return;
       box.hidden = false; if (d.total !== shown) count(d.total);
