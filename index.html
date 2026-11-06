@@ -1169,7 +1169,7 @@ window.addEventListener('message', function(e){
       n.textContent = fmt.format(Math.round(from + (to - from) * k)); if (k < 1) requestAnimationFrame(f); else shown = to; })(t0);
   }
   // COMPTEUR FICTIF pour la démo : à remettre à null avant le lancement pour afficher les vraies ventes.
-  var DEMO = 1243;
+  var DEMO = 43;
   function load(){
     if (DEMO !== null) { box.hidden = false; if (shown !== DEMO) count(DEMO); return; }
     fetch(base + '/api/tickets').then(function(r){ return r.json(); }).then(function(d){
