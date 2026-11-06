@@ -1117,16 +1117,21 @@ window.addEventListener('message', function(e){
     var nextEvent = rnd(.6, 1.6), peed = false;
     dog.classList.toggle('left', left);
     function act(){
-      var r = chase ? .5 + Math.random() * .25 : Math.random();
+      if (chase) { if (Math.random() < .3) jump(1); return; } // pendant la poursuite : surtout de la course
+      var r = Math.random();
       if (!chase && !peed && Math.random() < .22) { peed = true; pee(x, w, left); pause = 1.9; return; }
-      if (r < .4) { dog.classList.add('sniff'); if (Math.random() < .6) say('snif snif', 1100); pause = rnd(1.1, 2.2); setTimeout(function(){ dog.classList.remove('sniff'); }, pause * 1000); }
-      else if (r < .75) { jump(Math.random() < .35 ? 2 : 1); }
-      else if (r < .9) { dog.classList.add('bark'); say(pick(['Wouf !', 'Wouf wouf !', 'Ouaf !']), 900); pause = .9; setTimeout(function(){ dog.classList.remove('bark'); }, 900); }
+      if (r < .45) { dog.classList.add('sniff'); if (Math.random() < .6) say('snif snif', 1100); pause = rnd(1.1, 2.2); setTimeout(function(){ dog.classList.remove('sniff'); }, pause * 1000); }
+      else if (r < .6) { jump(Math.random() < .15 ? 2 : 1); }
+      else if (r < .85) { dog.classList.add('bark'); say(pick(['Wouf !', 'Wouf wouf !', 'Ouaf !']), 900); pause = .9; setTimeout(function(){ dog.classList.remove('bark'); }, 900); }
       else { speed *= 1.8; setTimeout(function(){ speed /= 1.8; }, 1200); }
     }
     function step(now){
       var dt = Math.min(.05, (now - last) / 1000); last = now;
       if (pause > 0) pause -= dt; else x += dir * speed * dt;
+      if (chase) { // ne jamais dépasser la boule : il reste juste derrière elle
+        var ball = document.querySelector('.fall-ball');
+        if (ball) { var cap = ball.getBoundingClientRect().left - w * 1.1; if (x > cap) x = cap; }
+      }
       nextEvent -= dt;
       if (nextEvent <= 0 && pause <= 0 && x > 20 && x < W - w - 20) { act(); nextEvent = rnd(1.2, 2.6); }
       dog.style.transform = 'translateX(' + x + 'px)';
