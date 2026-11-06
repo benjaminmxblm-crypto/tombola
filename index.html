@@ -1029,7 +1029,6 @@ window.addEventListener('message', function(e){
 @media (prefers-reduced-motion:reduce){.dog-run{display:none}}
 </style>
 <div class="dog-run" aria-hidden="true">
-<span class="dog-bubble"></span>
 <div class="hop"><div class="flip">
 <svg viewBox="0 0 110 70">
   <ellipse class="shadow" cx="54" cy="66" rx="34" ry="3" fill="rgba(27,27,58,.12)"/>
@@ -1060,10 +1059,10 @@ window.addEventListener('message', function(e){
 (function(){
   var dog = document.querySelector('.dog-run');
   if (!dog || !dog.animate || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
-  var hop = dog.querySelector('.hop'), bubble = dog.querySelector('.dog-bubble');
+  var hop = dog.querySelector('.hop');
   function rnd(a, b){ return a + Math.random() * (b - a); }
   function pick(list){ return list[Math.floor(Math.random() * list.length)]; }
-  function say(t, ms){ bubble.textContent = t; bubble.classList.add('on'); setTimeout(function(){ bubble.classList.remove('on'); }, ms); }
+  function say(){}
   function jump(n){
     var h = dog.offsetHeight * rnd(.5, .9), frames = [];
     for (var i = 0; i < n; i++) frames.push({ transform: 'translateY(0)', offset: i / n }, { transform: 'translateY(' + (-h) + 'px)', offset: (i + .5) / n, easing: 'ease-in' });
