@@ -52,7 +52,14 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
 .rows .n{font-variant-numeric:tabular-nums;color:var(--muted)}
 .note{margin:18px 0 0;font-size:13px;color:var(--muted)}
 .empty{color:var(--muted);font-weight:700;margin:10px 0 0}
-@media (max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
+.sold{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:14px;align-items:end;margin-bottom:14px}
+.sold .value{color:var(--pink)}
+.paper{display:flex;flex-direction:column;gap:6px}
+.paper label{font-weight:800;font-size:14px;color:var(--muted)}
+.paper .row{display:flex;gap:8px}
+.paper input{font:inherit;font-weight:800;width:110px;padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-height:44px}
+.prog{height:10px;border-radius:5px;background:var(--grid);overflow:hidden;margin-top:10px}.prog span{display:block;height:100%;background:var(--pink)}
+@media (max-width:820px){.sold{grid-template-columns:repeat(2,minmax(0,1fr))}.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -79,6 +86,25 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
       </div>
     </div>
     <p class="err" id="dash-err" hidden></p>
+
+    <section class="card" style="margin-bottom:14px">
+      <h2>Tickets vendus</h2>
+      <div class="sold" style="margin-top:12px">
+        <div class="tile"><p class="label">En ligne (HelloAsso)</p><p class="value" id="k-online">–</p><p class="sub" id="k-online-sub">&nbsp;</p></div>
+        <div class="tile"><p class="label">Papier</p><p class="value" id="k-paper">–</p><p class="sub">saisi à la main</p></div>
+        <div class="tile"><p class="label">Total</p><p class="value" id="k-total">–</p><p class="sub" id="k-total-sub">&nbsp;</p></div>
+        <form class="paper" id="add-form">
+          <label for="add-n">Nouvelle vente papier</label>
+          <div class="row"><input id="add-n" type="number" min="1" max="1000" inputmode="numeric" placeholder="ex. 5" required><button class="primary" type="submit">Ajouter</button></div>
+        </form>
+      </div>
+      <form class="paper" id="paper-form" style="margin-top:12px">
+        <label for="paper-n">Corriger le total papier (sans notification sur le site)</label>
+        <div class="row"><input id="paper-n" type="number" min="0" max="100000" inputmode="numeric" required><button type="submit">Corriger</button></div>
+      </form>
+      <div class="prog"><span id="k-prog" style="width:0"></span></div>
+      <p class="note" id="k-note" style="margin-top:10px">Le compteur s'affiche sur le site à partir de 50 tickets vendus. Chaque vente (HelloAsso ou « Ajouter ») fait apparaître une petite bulle anonyme sur le site, du type « Quelqu'un vient de prendre 3 tickets ». Les ventes HelloAsso sont relevées environ chaque minute.</p>
+    </section>
 
     <div class="tiles">
       <div class="card tile"><p class="label">Visiteurs uniques</p><p class="value" id="t-visitors">–</p><p class="sub" id="t-visitors-sub">&nbsp;</p></div>
@@ -128,7 +154,37 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
     if (!r.ok) { show(data.error, $('dash-err')); return; }
     show('', $('dash-err'));
     render(data);
+    loadTickets();
   }
+
+  async function loadTickets(){
+    try {
+      var d = await (await fetch('/api/tickets?t=' + Date.now(), { cache: 'no-store' })).json();
+      $('k-online').textContent = d.helloasso ? fmt.format(d.online) : '–';
+      $('k-online-sub').textContent = d.helloasso ? 'mis à jour automatiquement' : (d.error || 'clés HelloAsso non configurées');
+      $('k-paper').textContent = fmt.format(d.paper);
+      if (document.activeElement !== $('paper-n')) $('paper-n').value = d.paper;
+      $('k-total').textContent = fmt.format(d.total);
+      $('k-total-sub').textContent = 'sur ' + fmt.format(d.goal) + ' · ' + fmt.format(d.total * 2) + ' € récoltés';
+      $('k-prog').style.width = Math.min(100, d.total / d.goal * 100) + '%';
+    } catch(e) { $('k-online-sub').textContent = 'compteur indisponible'; }
+  }
+
+  $('add-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var r = await fetch('/api/tickets', { method: 'POST', headers: { 'x-admin-password': getPwd(), 'Content-Type': 'application/json' }, body: JSON.stringify({ add: Number($('add-n').value) }) });
+    var d = await r.json().catch(function(){ return {}; });
+    if (!r.ok) { show(d.error || 'Ajout impossible.', $('dash-err')); return; }
+    show('', $('dash-err')); $('add-n').value = ''; loadTickets();
+  });
+
+  $('paper-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var r = await fetch('/api/tickets', { method: 'POST', headers: { 'x-admin-password': getPwd(), 'Content-Type': 'application/json' }, body: JSON.stringify({ paper: Number($('paper-n').value) }) });
+    var d = await r.json().catch(function(){ return {}; });
+    if (!r.ok) { show(d.error || 'Enregistrement impossible.', $('dash-err')); return; }
+    show('', $('dash-err')); $('paper-n').blur(); loadTickets();
+  });
 
   function render(d){
     var t = d.totals;
