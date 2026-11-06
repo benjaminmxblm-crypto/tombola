@@ -1219,7 +1219,7 @@ window.addEventListener('message', function(e){
   }
 
   // COMPTEUR FICTIF pour la démo : à remettre à null avant le lancement pour afficher les vraies ventes.
-  var DEMO = 43;
+  var DEMO = null;
   // Aperçu de la bulle, uniquement en ajoutant ?apercu-bulle à l'adresse (jamais montré aux visiteurs).
   if (/apercu-bulle/.test(location.search)) setTimeout(function(){ queue.push({ n: 3, src: 'online', at: Date.now() }, { n: 5, src: 'paper', at: Date.now() - 4 * 60000 }); next(); }, 2500);
   function load(){
