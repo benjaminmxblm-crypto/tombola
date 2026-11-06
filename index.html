@@ -134,6 +134,9 @@ section{position:relative;z-index:1;padding-block:56px}
 @keyframes jcL{from{transform:translateY(0) rotate(-18deg)}to{transform:translateY(-14px) rotate(-8deg)}}
 @keyframes jcR{from{transform:translateY(0) rotate(16deg)}to{transform:translateY(-12px) rotate(6deg)}}
 @keyframes megaPulse{0%,100%{box-shadow:0 0 0 3px #FF4554,0 0 14px rgba(0,195,227,.4)}50%{box-shadow:0 0 0 3px #00C3E3,0 0 28px rgba(255,69,84,.7)}}
+.mega{border:3px solid #FF2D3D;animation:megaNeon 2.4s linear infinite}
+@keyframes megaNeon{0%,18%,22%,25%,53%,57%,100%{border-color:#FF2D3D;box-shadow:0 0 6px #FF2D3D,0 0 18px #FF2D3D,0 0 42px rgba(255,45,61,.85),0 0 80px rgba(255,45,61,.5),inset 0 0 18px rgba(255,45,61,.45),0 18px 50px rgba(11,14,46,.45)}20%,24%,55%{border-color:#7A1620;box-shadow:0 0 2px rgba(255,45,61,.3),inset 0 0 4px rgba(255,45,61,.15),0 18px 50px rgba(11,14,46,.45)}}
+@media (prefers-reduced-motion:reduce){.mega{animation:none;box-shadow:0 0 6px #FF2D3D,0 0 18px #FF2D3D,0 0 42px rgba(255,45,61,.85),0 18px 50px rgba(11,14,46,.45)}}
 @media (max-width:760px){
   .mega{grid-template-columns:1fr;padding:26px 20px 28px;gap:16px}
   .mega-rays{left:50%;top:28%}
