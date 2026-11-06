@@ -1049,5 +1049,65 @@ window.addEventListener('message', function(e){
   <g class="wheel"><circle cx="96" cy="70" r="9" fill="#1B1B3A"/><circle cx="96" cy="70" r="3.5" fill="#F2B705"/><line x1="96" y1="62" x2="96" y2="66" stroke="#F2B705" stroke-width="2"/></g>
 </svg>
 </div>
+
+<!-- Joy-Con qui tombent et s'accrochent aux lots -->
+<style>
+.jcd-layer{position:absolute;left:0;top:0;width:100%;height:0;z-index:4;pointer-events:none}
+.jcd{position:absolute;width:46px;height:auto;opacity:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.35));transform-origin:50% 8%}
+@media (max-width:600px){.jcd{width:32px}}
+@media (prefers-reduced-motion:reduce){.jcd-layer{display:none}}
+</style>
+<script>
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var srcL = document.querySelector('.jc-l'), srcR = document.querySelector('.jc-r');
+  if (!srcL || !srcR) return;
+  var targets = [].slice.call(document.querySelectorAll('#lots .jackpot:not(#mega), #lots-list > li.lot')).slice(0, 6);
+  if (!targets.length) return;
+  var layer = document.createElement('div'); layer.className = 'jcd-layer'; document.body.appendChild(layer);
+  var items = targets.map(function(card, i){
+    var img = document.createElement('img');
+    img.className = 'jcd'; img.alt = ''; img.src = (i % 2 ? srcR : srcL).src;
+    layer.appendChild(img);
+    return { card: card, img: img, side: i % 2 ? 'r' : 'l', done: false };
+  });
+  function place(it){
+    var r = it.card.getBoundingClientRect(), w = it.img.offsetWidth || 46;
+    if (innerWidth < 700) it.side = (r.left + r.width / 2) < innerWidth / 2 ? 'l' : 'r';
+    var x = it.side === 'r' ? r.right - w * 0.9 : r.left - w * 0.1;
+    it.img.style.left = (x + scrollX) + 'px';
+    it.img.style.top = (r.top + scrollY - w * 0.9) + 'px';
+  }
+  function placeAll(){ items.forEach(place); }
+  addEventListener('resize', placeAll);
+  addEventListener('load', placeAll);
+  setInterval(placeAll, 1500); // suit les changements de mise en page (bouton « Voir les lots »)
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var it = items.filter(function(x){ return x.card === e.target; })[0];
+      if (!it || it.done) return;
+      it.done = true; io.unobserve(e.target); place(it);
+      var tilt = it.side === 'r' ? 1 : -1;
+      var fall = e.boundingClientRect.top + 140;
+      it.img.style.opacity = 1;
+      var a = it.img.animate([
+        { transform: 'translateY(' + (-fall) + 'px) rotate(' + (tilt * 40) + 'deg)' },
+        { transform: 'translateY(0) rotate(' + (tilt * 14) + 'deg)', offset: .62, easing: 'ease-out' },
+        { transform: 'translateY(-16px) rotate(' + (-tilt * 6) + 'deg)', offset: .78, easing: 'ease-in' },
+        { transform: 'translateY(0) rotate(' + (tilt * 18) + 'deg)', offset: .9 },
+        { transform: 'translateY(0) rotate(' + (tilt * 12) + 'deg)' }
+      ], { duration: 1100, easing: 'cubic-bezier(.45,0,.9,.5)', fill: 'forwards' });
+      a.onfinish = function(){
+        it.img.animate([
+          { transform: 'rotate(' + (tilt * 12) + 'deg)' },
+          { transform: 'rotate(' + (tilt * 4) + 'deg)' }
+        ], { duration: 1800, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out' });
+      };
+    });
+  }, { threshold: .45 });
+  items.forEach(function(it, i){ setTimeout(function(){ io.observe(it.card); }, i * 120); });
+})();
+</script>
 </body>
 </html>
