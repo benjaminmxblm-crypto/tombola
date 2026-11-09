@@ -1019,6 +1019,14 @@ window.addEventListener('message', function(e){
 .dog-run svg{width:100%;height:100%;overflow:visible;display:block}
 .dog-run .hop{width:100%;height:100%;transform-origin:50% 92%}
 .dog-shadow{position:absolute;left:18%;bottom:1.5%;width:62%;height:5%;border-radius:50%;background:rgba(27,27,58,.13)}
+/* caresse au clic : il s'arrête, tête levée, queue folle, petits cœurs, saut de joie puis course */
+.dog-run .hop{pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.dog-run.pet .leg,.dog-run.pet .body,.dog-run.pet .ear{animation:none}
+.dog-run.pet .head{transform:rotate(-14deg)}
+.dog-run.left.pet .head{transform:rotate(-14deg)}
+.dog-run.pet .tail{animation-duration:.07s}
+.dog-heart{position:fixed;z-index:6;pointer-events:none;width:18px;height:18px;margin:-9px 0 0 -9px;color:#E0478C}
+.dog-heart svg{display:block;width:100%;height:100%}
 .dog-run .body{animation:dogBob .22s ease-in-out infinite alternate}
 .dog-run .leg{transform-box:fill-box;transform-origin:50% 0;animation:dogLeg .22s ease-in-out infinite alternate}
 .dog-run .leg.b{animation-direction:alternate-reverse}
@@ -1116,7 +1124,26 @@ window.addEventListener('message', function(e){
       a.onfinish = function(){ if (++i < n) one(); else dog.classList.remove('jump', 'air'); };
     })();
   }
-  var busy = false, timer = null;
+  var busy = false, timer = null, petPause = 0, boost = 1, pets = 0;
+  function hearts(){
+    var r = hop.getBoundingClientRect(), cx = r.left + r.width * (dog.classList.contains('left') ? .28 : .72), cy = r.top + r.height * .2;
+    for (var i = 0; i < 4; i++) (function(i){
+      var h = document.createElement('span'); h.className = 'dog-heart'; h.setAttribute('aria-hidden', 'true');
+      h.innerHTML = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.5 1.2 4.3 2.4.8-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>';
+      h.style.left = cx + 'px'; h.style.top = cy + 'px'; document.body.appendChild(h);
+      var dx = (i - 1.5) * 16 + rnd(-6, 6), s = rnd(.7, 1.15);
+      h.animate([{ transform: 'translate(0,8px) scale(.3)', opacity: 0 }, { transform: 'translate(' + dx * .4 + 'px,-14px) scale(' + s + ')', opacity: 1, offset: .25 },
+                 { transform: 'translate(' + dx + 'px,-60px) scale(' + s * .9 + ')', opacity: 0 }], { duration: 1100 + i * 120, delay: i * 90, easing: 'ease-out', fill: 'both' })
+        .onfinish = function(){ h.remove(); };
+    })(i);
+  }
+  hop.addEventListener('click', function(){
+    if (!busy || dog.classList.contains('pet')) return;
+    pets++; dog.classList.remove('sniff', 'bark', 'pee'); dog.classList.add('pet'); hearts();
+    petPause = 1.5;
+    setTimeout(function(){ jump(pets % 3 === 0 ? 2 : 1); }, 380);
+    setTimeout(function(){ dog.classList.remove('pet'); boost = 1.8; setTimeout(function(){ boost = 1; }, 1400); }, 1500);
+  });
   function later(ms){ clearTimeout(timer); timer = setTimeout(function(){ run(false); }, ms); }
   function pee(x, w, left){
     dog.classList.add('pee');
@@ -1145,13 +1172,13 @@ window.addEventListener('message', function(e){
     }
     function step(now){
       var dt = Math.min(.05, (now - last) / 1000); last = now;
-      if (pause > 0) pause -= dt; else x += dir * speed * dt;
+      if (petPause > 0) petPause -= dt; else if (pause > 0) pause -= dt; else x += dir * speed * boost * dt;
       if (chase) { // ne jamais dépasser la boule : il reste juste derrière elle
         var ball = document.querySelector('.fall-ball');
         if (ball) { var cap = ball.getBoundingClientRect().left - w * 1.1; if (x > cap) x = cap; }
       }
       nextEvent -= dt;
-      if (nextEvent <= 0 && pause <= 0 && x > 20 && x < W - w - 20) { act(); nextEvent = rnd(1.2, 2.6); }
+      if (nextEvent <= 0 && pause <= 0 && petPause <= 0 && x > 20 && x < W - w - 20) { act(); nextEvent = rnd(1.2, 2.6); }
       dog.style.transform = 'translateX(' + x + 'px)';
       if ((dir > 0 && x < end) || (dir < 0 && x > end)) requestAnimationFrame(step);
       else { busy = false; later(rnd(8000, 28000)); }
