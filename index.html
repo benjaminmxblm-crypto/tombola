@@ -138,6 +138,8 @@ section{position:relative;z-index:1;padding-block:56px}
 .jc-l{left:10px;bottom:26px;top:auto;animation:jcL 3s ease-in-out infinite alternate}
 .jc-r{left:44%;top:22px;bottom:auto;animation:jcR 3.6s ease-in-out infinite alternate}
 .mega-game{position:absolute;right:2%;bottom:-6%;width:30%;max-width:150px;height:auto;border-radius:8px;z-index:2;transform:rotate(9deg);box-shadow:0 14px 24px rgba(0,0,0,.55),0 0 0 3px #FFFFFF;animation:megaGame 3s ease-in-out infinite alternate}
+.mega-game2{right:auto;left:2%;transform:rotate(-9deg);animation-name:megaGame2;animation-delay:-1.5s}
+@keyframes megaGame2{from{transform:rotate(-9deg) translateY(0)}to{transform:rotate(-6deg) translateY(-8px)}}
 @keyframes megaGame{from{transform:rotate(9deg) translateY(0)}to{transform:rotate(6deg) translateY(-8px)}}
 .mega-text{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
 .mega-tag{display:inline-block;padding:5px 16px;border-radius:999px;background:linear-gradient(90deg,#00C3E3,#FF4554);font-weight:800;font-size:14px;letter-spacing:.16em;text-transform:uppercase;box-shadow:0 0 18px rgba(255,69,84,.6)}
@@ -633,15 +635,16 @@ html.intro .hero .purpose{animation:riseIn .7s .7s ease-out both}
         <div class="mega-rays" aria-hidden="true"></div>
         <img class="jc jc-l" src="img/joycon-l.png" alt="" aria-hidden="true">
         <img class="jc jc-r" src="img/joycon-r.png" alt="" aria-hidden="true">
-        <div class="mega-media"><img class="mega-game" src="img/mario-kart-8.jpg" alt="Jeu Mario Kart 8 Deluxe inclus" width="360" height="587"><img class="mega-box" src="img/switch-pack.png" alt="Pack Nintendo Switch avec Mario Kart 8 Deluxe, Joy-Con bleu et rouge néon" width="691" height="575"></div>
+        <div class="mega-media"><img class="mega-game" src="img/mario-kart-8.jpg" alt="Jeu Mario Kart 8 Deluxe inclus" width="360" height="587"><img class="mega-game mega-game2" src="img/just-dance.jpg" alt="Jeu Just Dance Decades of Hits inclus" width="350" height="574"><img class="mega-box" src="img/switch-pack.png" alt="Pack Nintendo Switch avec Mario Kart 8 Deluxe, Joy-Con bleu et rouge néon" width="691" height="575"></div>
         <div class="mega-text">
           <span class="mega-tag">Méga lot</span>
-          <h3>Nintendo Switch <span>+ Mario Kart 8 Deluxe</span></h3>
-          <p>La console avec ses Joy-Con bleu et rouge néon, et le jeu culte inclus dans la boîte. Le lot qui va faire des jaloux dans la cour de récré !</p>
+          <h3>Nintendo Switch <span>+ Mario Kart 8 Deluxe<br>+ Just Dance</span></h3>
+          <p>La console avec ses Joy-Con bleu et rouge néon, Mario Kart 8 Deluxe et Just Dance : de quoi s'amuser en famille tout l'hiver. Le lot qui va faire des jaloux dans la cour de récré !</p>
           <ul class="mega-points">
             <li>Sur la télé ou partout en mode portable</li>
             <li>À deux dès l'ouverture de la boîte</li>
-            <li>Carte de jeu Mario Kart 8 Deluxe incluse</li>
+            <li>Mario Kart 8 Deluxe en cartouche, dans la boîte</li>
+            <li>Just Dance Decades of Hits en plus (code de téléchargement)</li>
           </ul>
           <div class="mega-cta"><a class="btn mega-btn" href="#billets">Je tente ma chance · 2 €</a><span class="mega-odds">1 ticket = 1 chance de la gagner</span></div>
         </div>
