@@ -18,6 +18,7 @@
   --paper:#0D1130; --card:#171D4A; --ink:#F2F3FB; --muted:#B9BEE0; --line:#2A3170;
   --blue:#6F82FF; --blue-ink:#9AA7FF; --pink:#FF86B6; --gold:#F6C42B; --teal:#5ED6B4; --grid:#262D66; color-scheme:dark}}
 *{box-sizing:border-box}
+[hidden]{display:none !important}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
 .wrap{max-width:1040px;margin:0 auto;padding-block:32px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2{font-family:var(--display);margin:0;line-height:1.05}
@@ -81,6 +82,7 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
         <h1>Tableau de bord</h1>
       </div>
       <div class="actions">
+        <a href="/ventes" style="font-weight:800;border-radius:999px;min-height:44px;padding:8px 18px;border:2px solid var(--blue);color:var(--blue-ink);text-decoration:none;display:inline-flex;align-items:center">Ventes et vendeurs</a>
         <button type="button" id="refresh">Actualiser</button>
         <button type="button" id="logout">Se déconnecter</button>
       </div>
@@ -160,8 +162,8 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
   async function loadTickets(){
     try {
       var d = await (await fetch('/api/tickets?t=' + Date.now(), { cache: 'no-store' })).json();
-      $('k-online').textContent = d.helloasso ? fmt.format(d.online) : '–';
-      $('k-online-sub').textContent = d.helloasso ? 'mis à jour automatiquement' : (d.error || 'clés HelloAsso non configurées');
+      $('k-online').textContent = d.source ? fmt.format(d.online) : '–';
+      $('k-online-sub').textContent = d.source === 'api' ? 'mis à jour automatiquement' : d.source === 'import' ? 'dernier export importé (page Ventes)' : (d.error || 'importez l\'export dans la page Ventes');
       $('k-paper').textContent = fmt.format(d.paper);
       if (document.activeElement !== $('paper-n')) $('paper-n').value = d.paper;
       $('k-total').textContent = fmt.format(d.total);

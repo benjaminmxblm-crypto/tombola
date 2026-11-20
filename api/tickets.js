@@ -79,10 +79,11 @@ module.exports = async (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Cache-Control', 'public, s-maxage=15, stale-while-revalidate=60');
-  let online = null, paper = 0, error = null, events = [];
+  let online = null, paper = 0, error = null, events = [], imported = null;
   try {
     if (configured()) {
-      const [cached, p, evs] = await pipeline([['GET', 'tickets:online'], ['GET', 'tickets:paper'], ['LRANGE', 'tickets:events', 0, 9]]);
+      const [cached, p, evs, imp] = await pipeline([['GET', 'tickets:online'], ['GET', 'tickets:paper'], ['LRANGE', 'tickets:events', 0, 9], ['GET', 'tickets:online:import']]);
+      if (imp !== null && imp !== undefined) imported = Number(imp) || 0;
       paper = Number(p) || 0;
       events = (evs || []).map((e) => { try { return JSON.parse(e); } catch (x) { return null; } }).filter(Boolean);
       if (cached !== null && cached !== undefined) online = Number(cached);
@@ -103,12 +104,16 @@ module.exports = async (req, res) => {
   } catch (e) {
     error = 'HelloAsso indisponible';
   }
+  // sans clés HelloAsso (ou en panne) : dernier export HelloAsso importé dans la page /ventes
+  const fromImport = online === null && imported !== null;
+  if (fromImport) online = imported;
   res.status(200).json({
     online: online || 0,
     paper,
     total: (online || 0) + paper,
     goal: GOAL,
-    helloasso: online !== null,
+    helloasso: online !== null && !fromImport,
+    source: fromImport ? 'import' : (online !== null ? 'api' : null),
     events: events.slice(0, 10),
     error,
   });

@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Ventes et vendeurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@600;700;800&display=swap">
+<style>
+/* Ventes de la tombola : en ligne (export HelloAsso) + papier, classement des vendeurs, talons à imprimer. */
+:root{
+  --paper:#F6F7FC; --card:#FFFFFF; --ink:#1B1B3A; --muted:#4A4E6E; --line:#DDE1F5;
+  --blue:#2B3FB8; --blue-ink:#2B3FB8; --pink:#C02A64; --gold:#F2B705; --gold-ink:#8A6A00; --teal:#0F7A62; --grid:#E7EAF7; --chip:#EEF0FB;
+  --display:'Baloo 2','Nunito',system-ui,sans-serif; --body:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#0D1130; --card:#171D4A; --ink:#F2F3FB; --muted:#B9BEE0; --line:#2A3170;
+  --blue:#6F82FF; --blue-ink:#9AA7FF; --pink:#FF86B6; --gold:#F6C42B; --gold-ink:#F6C42B; --teal:#5ED6B4; --grid:#262D66; --chip:#222A63; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.05}
+h1{font-size:clamp(30px,5vw,42px);color:var(--blue-ink)}
+h2{font-size:22px} h3{font-size:18px}
+a{color:var(--blue-ink);font-weight:800}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.eyebrow{margin:0;font-weight:800;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+button,.btn{font:inherit;font-weight:800;cursor:pointer;border-radius:999px;min-height:44px;padding:8px 18px;border:2px solid var(--blue);background:transparent;color:var(--blue-ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+button.primary{background:var(--blue);border-color:var(--blue);color:#FFFFFF}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,select:focus-visible,.btn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+input,select{font:inherit;font-weight:700;padding:8px 12px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-height:44px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.login{max-width:420px;margin:12vh auto 0;display:flex;flex-direction:column;gap:14px}
+.login label{font-weight:800}
+.err{color:var(--pink);font-weight:700;margin:0}
+.ok{color:var(--teal);font-weight:800;margin:0}
+.note{margin:10px 0 0;font-size:13px;color:var(--muted);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile .label{margin:0;font-weight:800;font-size:14px;color:var(--muted)}
+.tile .value{margin:4px 0 0;font-family:var(--display);font-size:40px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.tile .sub{margin:6px 0 0;font-size:13px;color:var(--muted);font-weight:700}
+.tile.hl .value{color:var(--pink)}
+.prog{height:10px;border-radius:5px;background:var(--grid);overflow:hidden;margin-top:12px}.prog span{display:block;height:100%;background:var(--pink)}
+.drop{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:12px}
+.drop input[type=file]{max-width:100%}
+.chart{overflow-x:auto;margin-top:8px}
+svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
+.legend{display:flex;gap:14px;font-size:13px;font-weight:700;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+.form-row{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-top:12px}
+.form-row label{display:flex;flex-direction:column;gap:4px;font-weight:800;font-size:14px;color:var(--muted)}
+.form-row input[type=number]{width:110px}
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:12px}
+.lvl{border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--paper)}
+.lvl ol{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.lvl li{display:flex;justify-content:space-between;gap:8px;font-weight:800}
+.lvl li .n{font-variant-numeric:tabular-nums;color:var(--muted)}
+.lvl li.win .who::before{content:"🏆 ";}
+.lvl .empty{color:var(--muted);font-weight:700;font-size:14px}
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;font-variant-numeric:tabular-nums}
+.tbl th{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 6px;border-bottom:2px solid var(--line)}
+.tbl td{padding:8px 6px;border-bottom:1px solid var(--line);font-weight:700;vertical-align:middle}
+.tbl td.num,.tbl th.num{text-align:right}
+.tbl .rank{font-family:var(--display);font-size:20px;color:var(--blue-ink);width:40px}
+.tbl tr.top1 .rank{color:var(--pink)}
+.tbl select{min-height:38px;padding:4px 8px}
+.tbl input[type=number]{width:84px;min-height:38px;padding:4px 8px;text-align:right}
+.scroll{overflow-x:auto}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--chip);font-size:13px;font-weight:800}
+.hidden{display:none !important}
+@media (max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.podium{grid-template-columns:1fr}.tile .value{font-size:30px}}
+
+/* Talons imprimables : format étiquettes A4 3 × 7 (63,5 × 38,1 mm, type Avery L7160), aussi utilisable sur papier normal. */
+#print-area{display:none}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body > *:not(#print-area){display:none !important}
+  #print-area{display:block}
+  .sheet{width:210mm;height:297mm;padding:15.15mm 7.25mm 0;display:grid;grid-template-columns:repeat(3,63.5mm);grid-auto-rows:38.1mm;column-gap:2.5mm;page-break-after:always;break-after:page;overflow:hidden}
+  .sheet:last-child{page-break-after:auto;break-after:auto}
+  .stub{box-sizing:border-box;padding:3mm 4mm;font-family:'Nunito',Arial,sans-serif;color:#000;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+  .cut .stub{outline:0.2mm dashed #999;outline-offset:-0.1mm}
+  .stub .t{font-size:6.5pt;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#555;display:flex;justify-content:space-between}
+  .stub .nm{font-size:12pt;font-weight:800;line-height:1.1;margin-top:1mm}
+  .stub .ph{font-size:10.5pt;font-weight:800;letter-spacing:.02em}
+  .stub .by{font-size:8pt;font-weight:700}
+  .stub .ref{font-size:7pt;font-weight:700;color:#444;display:flex;justify-content:space-between}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <form class="card login" id="login">
+    <p class="eyebrow">Les P'tits Rennevillois</p>
+    <h1>Ventes et vendeurs</h1>
+    <label for="pwd">Mot de passe admin</label>
+    <input id="pwd" type="password" autocomplete="current-password" required>
+    <p class="err" id="login-err" hidden></p>
+    <button class="primary" type="submit">Entrer</button>
+  </form>
+
+  <main id="dash" hidden>
+    <div class="top">
+      <div>
+        <p class="eyebrow">Tombola de Noël · ventes</p>
+        <h1>Ventes et vendeurs</h1>
+      </div>
+      <div class="actions">
+        <a class="btn" href="/admin">Statistiques du site</a>
+        <button type="button" id="refresh">Actualiser</button>
+      </div>
+    </div>
+    <p class="err" id="err" hidden></p>
+
+    <div class="stack">
+
+      <section class="card">
+        <h2>1. Importer les ventes HelloAsso</h2>
+        <p class="note" style="margin-top:6px">Sur HelloAsso, exportez la liste des participants de la tombola (fichier Excel). Déposez-le ici à chaque mise à jour. Le fichier est lu sur cet ordinateur : les noms et téléphones ne sont jamais envoyés au site, seuls les totaux le sont.</p>
+        <div class="drop">
+          <input type="file" id="file" accept=".xlsx,.xls,.csv" aria-label="Fichier d'export HelloAsso">
+          <span id="import-status" class="note" style="margin:0"></span>
+        </div>
+      </section>
+
+      <div class="tiles">
+        <div class="card tile hl"><p class="label">Tickets vendus</p><p class="value" id="k-total">–</p><p class="sub" id="k-total-sub">&nbsp;</p></div>
+        <div class="card tile"><p class="label">Montant récolté</p><p class="value" id="k-amount">–</p><p class="sub" id="k-amount-sub">&nbsp;</p></div>
+        <div class="card tile"><p class="label">En ligne · papier</p><p class="value" id="k-split">–</p><p class="sub" id="k-split-sub">&nbsp;</p></div>
+        <div class="card tile"><p class="label">Commandes HelloAsso</p><p class="value" id="k-orders">–</p><p class="sub" id="k-orders-sub">&nbsp;</p></div>
+      </div>
+      <div class="card" style="padding-top:14px">
+        <div class="head"><h3>Objectif 4 000 tickets</h3><span class="note" style="margin:0" id="k-goal"></span></div>
+        <div class="prog"><span id="k-prog" style="width:0"></span></div>
+      </div>
+
+      <section class="card">
+        <div class="head">
+          <h2>Tickets vendus par jour</h2>
+          <div class="legend"><span><i style="background:var(--blue)"></i>En ligne</span><span><i style="background:var(--gold)"></i>Papier</span></div>
+        </div>
+        <div class="chart" id="chart"></div>
+      </section>
+
+      <section class="card">
+        <h2>2. Ajouter une vente papier</h2>
+        <form class="form-row" id="paper-form">
+          <label>Vendu par (enfant)<input id="p-seller" list="sellers" required placeholder="ex. Lenny Caunes" autocomplete="off"></label>
+          <label>Nombre de tickets<input id="p-n" type="number" min="1" max="1000" inputmode="numeric" required placeholder="ex. 5"></label>
+          <button class="primary" type="submit">Ajouter</button>
+          <span class="ok" id="p-ok" hidden></span>
+        </form>
+        <datalist id="sellers"></datalist>
+        <p class="note">Chaque vente ajoutée compte pour le concours et fait apparaître une petite bulle anonyme sur le site (« 5 tickets viennent d'être vendus sur papier »). Pour corriger une erreur, changez le nombre « Papier » dans le classement ci-dessous.</p>
+      </section>
+
+      <section class="card">
+        <h2>Concours des vendeurs : les 2 meilleurs par niveau</h2>
+        <div class="podium" id="podium"></div>
+        <p class="note">Choisissez le niveau de chaque enfant dans le classement complet pour qu'il apparaisse ici.</p>
+      </section>
+
+      <section class="card">
+        <h2>Classement complet</h2>
+        <div class="scroll">
+          <table class="tbl" id="board">
+            <thead><tr><th>#</th><th>Vendeur</th><th>Niveau</th><th class="num">En ligne</th><th class="num">Papier</th><th class="num">Total</th><th class="num">€</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="note">Une commande HelloAsso « de la part de Lenny et Maylone » est partagée à parts égales. Les tickets sans vendeur indiqué sont comptés dans « Non renseigné ».</p>
+      </section>
+
+      <section class="card" id="alias-card" hidden>
+        <h2>Noms saisis sur HelloAsso</h2>
+        <p class="note" style="margin-top:6px">Les parents écrivent le nom de l'enfant à leur façon. Les saisies qui commencent par le même prénom sont regroupées automatiquement ; corrigez ici si deux enfants ont le même prénom ou si un nom est mal rangé.</p>
+        <div class="scroll">
+          <table class="tbl" id="aliases"><thead><tr><th>Saisi sur HelloAsso</th><th class="num">Tickets</th><th>Compté pour</th></tr></thead><tbody></tbody></table>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>3. Talons des tickets en ligne, pour l'urne</h2>
+        <p class="note" style="margin-top:6px">Un talon par chance : un « lot de 5 tickets » donne 5 talons. Chaque talon porte le nom, le téléphone, le vendeur et le numéro de billet HelloAsso. Imprimez sur des planches d'étiquettes A4 3 × 7 (63,5 × 38,1 mm, type Avery L7160) à coller sur les talons du carnet, ou sur du papier normal à découper.</p>
+        <p id="stub-status" style="font-weight:800;margin:12px 0 0">Importez d'abord l'export HelloAsso (étape 1).</p>
+        <div class="form-row">
+          <button class="primary" type="button" id="print-new" disabled>Imprimer les nouveaux</button>
+          <button type="button" id="print-all" disabled>Tout imprimer</button>
+          <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="cut" checked style="min-height:auto">Traits de découpe</label>
+        </div>
+        <div class="form-row" id="mark-row" hidden>
+          <span style="font-weight:800">L'impression s'est bien passée ?</span>
+          <button class="primary" type="button" id="mark">Oui, marquer comme imprimés</button>
+        </div>
+        <p class="note">Le site retient seulement les numéros de billet déjà imprimés, pour ne proposer ensuite que les nouvelles ventes. <button type="button" id="unprint" style="min-height:32px;padding:2px 12px;font-size:13px">Tout remettre « à imprimer »</button></p>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div id="print-area" aria-hidden="true"></div>
+
+<script>
+(function(){
+  var KEY = 'tombola-admin-pwd';
+  var LEVELS = ['Maternelles', 'CP · CE1 · CE2', 'CM1 · CM2'];
+  var $ = function(id){ return document.getElementById(id); };
+  var fmt = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
+  var eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+  var state = { online: null, paper: { bySeller: {}, byDay: {}, total: 0 }, levels: {}, aliases: {}, printed: [] };
+  var rows = null, lastPrint = [];
+
+  function getPwd(){ try { return sessionStorage.getItem(KEY) || ''; } catch(e){ return window.__pwd || ''; } }
+  function setPwd(v){ try { v ? sessionStorage.setItem(KEY, v) : sessionStorage.removeItem(KEY); } catch(e){ window.__pwd = v; } }
+  function show(msg, el){ el = el || $('err'); el.textContent = msg || ''; el.hidden = !msg; }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+
+  async function api(body){
+    var r = await fetch('/api/sales', body ? { method: 'POST', headers: { 'x-admin-password': getPwd(), 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+                                           : { headers: { 'x-admin-password': getPwd() }, cache: 'no-store' });
+    var d = await r.json().catch(function(){ return {}; });
+    if (r.status === 401) { setPwd(''); $('dash').hidden = true; $('login').hidden = false; show(d.error, $('login-err')); throw new Error('auth'); }
+    if (!r.ok) throw new Error(d.error || 'Erreur du serveur.');
+    return d;
+  }
+
+  async function load(){
+    if (!getPwd()) return;
+    try { state = await api(); } catch(e){ if (e.message !== 'auth') show(e.message); return; }
+    $('login').hidden = true; $('dash').hidden = false; show('');
+    if (rows) summarize(true);
+    render();
+  }
+
+  // ---------- Noms des vendeurs ----------
+  function clean(s){ return String(s || '').replace(/\s+/g, ' ').trim(); }
+  function fold(s){ return clean(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function title(s){ return clean(s).toLowerCase().replace(/(^|[\s'-])(\p{L})/gu, function(m, a, b){ return a + b.toUpperCase(); }); }
+  function parts(raw){
+    var s = clean(raw);
+    if (!s) return ['Non renseigné'];
+    var al = state.aliases[s.toLowerCase()];
+    if (al) return [al];
+    return s.split(/\s+(?:et|&)\s+|\s*[,\/+]\s*/i).map(clean).filter(Boolean).map(function(p){
+      var a = state.aliases[p.toLowerCase()]; return a || p;
+    });
+  }
+  // Regroupe les noms par prénom (premier mot) et garde la forme la plus complète.
+  function canonMap(names){
+    var best = {}, map = {};
+    names.forEach(function(n){
+      if (n === 'Non renseigné' || isAlias(n)) return;
+      var k = fold(n).split(' ')[0];
+      var cur = best[k];
+      if (!cur || n.split(' ').length > cur.split(' ').length) best[k] = n;
+    });
+    names.forEach(function(n){
+      if (n === 'Non renseigné' || isAlias(n)) { map[n] = n; return; }
+      var b = best[fold(n).split(' ')[0]] || n;
+      map[n] = b === b.toLowerCase() || b === b.toUpperCase() || /\s[a-zà-ÿ]/.test(b) ? title(b) : b;
+    });
+    return map;
+  }
+  function isAlias(n){ for (var k in state.aliases) if (state.aliases[k] === n) return true; return false; }
+
+  // ---------- Import de l'export HelloAsso ----------
+  function loadLib(){
+    return window.XLSX ? Promise.resolve() : new Promise(function(ok, ko){
+      var s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+      s.onload = ok; s.onerror = function(){ ko(new Error('Impossible de charger le lecteur de fichiers Excel.')); }; document.head.appendChild(s);
+    });
+  }
+  function col(h, re){ for (var i = 0; i < h.length; i++) if (re.test(fold(h[i]))) return i; return -1; }
+
+  $('file').addEventListener('change', async function(){
+    var f = this.files && this.files[0]; if (!f) return;
+    $('import-status').textContent = 'Lecture du fichier…';
+    try {
+      await loadLib();
+      var wb = XLSX.read(await f.arrayBuffer(), { type: 'array', cellDates: true });
+      var data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: true, defval: '' });
+      var h = (data[0] || []).map(String);
+      var c = { ref: col(h, /^reference commande/), date: col(h, /^date de la commande/), st: col(h, /^statut/),
+                nom: col(h, /^nom participant/), pre: col(h, /^prenom participant/), pnom: col(h, /^nom payeur/), ppre: col(h, /^prenom payeur/),
+                tarif: col(h, /^tarif$/), mt: col(h, /^montant tarif/), billet: col(h, /^numero de billet/), tel: col(h, /^telephone/), by: col(h, /vendu par|de la part/) };
+      if (c.ref < 0 || c.mt < 0 || c.billet < 0) throw new Error("Ce fichier ne ressemble pas à l'export des participants HelloAsso.");
+      rows = data.slice(1).filter(function(r){ return r[c.ref] !== ''; }).map(function(r){
+        var d = r[c.date] instanceof Date ? r[c.date] : new Date(String(r[c.date]).replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1'));
+        var mt = Number(String(r[c.mt]).replace(',', '.')) || 0;
+        var n = Math.max(1, Math.round(mt / 2)) ;
+        if (!mt && /5/.test(String(r[c.tarif]))) n = 5;
+        return { ref: String(r[c.ref]), date: d, ok: c.st < 0 || /valid|pay|autoris/i.test(fold(r[c.st])),
+                 name: clean((r[c.pre] || r[c.ppre] || '') + ' ' + (r[c.nom] || r[c.pnom] || '')), tel: String(r[c.tel] || '').replace(/\D/g, ''),
+                 by: clean(r[c.by]), billet: String(r[c.billet]), n: n, amount: mt };
+      }).filter(function(r){ return r.ok; });
+      await summarize(false);
+      $('import-status').textContent = '';
+      show('');
+    } catch(e){ $('import-status').textContent = ''; show(e.message || 'Lecture impossible.'); }
+    this.value = '';
+  });
+
+  // Calcule les totaux (sans données personnelles) et les envoie au site.
+  async function summarize(localOnly){
+    if (!rows) return;
+    var bySeller = {}, byDay = {}, tickets = 0, amount = 0, refs = {}, lots5 = 0, singles = 0, last = 0;
+    var allParts = []; rows.forEach(function(r){ allParts = allParts.concat(parts(r.by)); });
+    var cmap = canonMap(allParts.concat(Object.keys(state.paper.bySeller || {})));
+    rows.forEach(function(r){
+      tickets += r.n; amount += r.amount; refs[r.ref] = 1; r.n === 5 ? lots5++ : singles++;
+      var ps = parts(r.by); ps.forEach(function(p){ var k = cmap[p] || p; bySeller[k] = (bySeller[k] || 0) + r.n / ps.length; });
+      if (!isNaN(r.date)) { var day = r.date.toLocaleDateString('sv-SE'); byDay[day] = (byDay[day] || 0) + r.n; if (+r.date > last) last = +r.date; }
+    });
+    var online = { tickets: tickets, amount: amount, orders: Object.keys(refs).length, lots5: lots5, singles: singles, bySeller: bySeller, byDay: byDay,
+                   lastOrder: last ? new Date(last).toISOString() : '' };
+    state.online = Object.assign({ importedAt: new Date().toISOString() }, online);
+    if (!localOnly) { try { await api({ action: 'import', online: online }); } catch(e){ if (e.message !== 'auth') show(e.message); } }
+    render();
+  }
+
+  // ---------- Affichage ----------
+  function board(){
+    var on = (state.online && state.online.bySeller) || {}, pa = state.paper.bySeller || {};
+    var cmap = canonMap(Object.keys(on).concat(Object.keys(pa)));
+    var m = {};
+    function add(name, key, v){ var k = cmap[name] || name; m[k] = m[k] || { name: k, online: 0, paper: 0, paperKeys: [] }; m[k][key] += v; if (key === 'paper') m[k].paperKeys.push(name); }
+    Object.keys(on).forEach(function(n){ add(n, 'online', on[n]); });
+    Object.keys(pa).forEach(function(n){ add(n, 'paper', pa[n]); });
+    return Object.keys(m).map(function(k){ var x = m[k]; x.total = x.online + x.paper; x.level = levelOf(x.name); return x; })
+      .sort(function(a, b){ return b.total - a.total || a.name.localeCompare(b.name); });
+  }
+  function levelOf(name){
+    if (state.levels[name]) return state.levels[name];
+    var k = fold(name).split(' ')[0];
+    for (var n in state.levels) if (fold(n).split(' ')[0] === k) return state.levels[n];
+    return '';
+  }
+
+  function render(){
+    var on = state.online, onT = on ? on.tickets : 0, paT = state.paper.total || 0, tot = onT + paT;
+    $('k-total').textContent = fmt.format(tot);
+    $('k-total-sub').textContent = tot ? (Math.round(tot / 4000 * 1000) / 10).toString().replace('.', ',') + ' % de l\'objectif' : 'pas encore de vente';
+    $('k-amount').textContent = eur.format((on ? on.amount : 0) + paT * 2);
+    $('k-amount-sub').textContent = eur.format(on ? on.amount : 0) + ' en ligne · ' + eur.format(paT * 2) + ' papier';
+    $('k-split').textContent = fmt.format(onT) + ' · ' + fmt.format(paT);
+    $('k-split-sub').textContent = tot ? Math.round(onT / tot * 100) + ' % en ligne' : '';
+    $('k-orders').textContent = on ? fmt.format(on.orders) : '–';
+    $('k-orders-sub').textContent = on && on.orders ? 'panier moyen ' + eur.format(on.amount / on.orders) + ' · ' + on.lots5 + ' lots de 5' : 'importez l\'export HelloAsso';
+    $('k-goal').textContent = fmt.format(tot) + ' / 4 000 · ' + eur.format(tot * 2);
+    $('k-prog').style.width = Math.min(100, tot / 40) + '%';
+    $('import-status').textContent = on && on.importedAt ? 'Dernier import : ' + new Date(on.importedAt).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }) +
+      (on.lastOrder ? ' · dernière commande du ' + new Date(on.lastOrder).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }) : '') : 'Aucun export importé pour le moment.';
+    chart();
+    var b = board();
+    $('sellers').innerHTML = b.filter(function(x){ return x.name !== 'Non renseigné'; }).map(function(x){ return '<option value="' + esc(x.name) + '">'; }).join('');
+    renderBoard(b); renderPodium(b); renderAliases(); renderStubs();
+  }
+
+  function renderBoard(b){
+    var tb = $('board').querySelector('tbody');
+    if (!b.length) { tb.innerHTML = '<tr><td colspan="7" style="color:var(--muted)">Pas encore de vente.</td></tr>'; return; }
+    tb.innerHTML = b.map(function(x, i){
+      var sel = x.name === 'Non renseigné' ? '–' : '<select data-level="' + esc(x.name) + '" aria-label="Niveau de ' + esc(x.name) + '"><option value="">—</option>' +
+        LEVELS.map(function(l){ return '<option' + (x.level === l ? ' selected' : '') + '>' + l + '</option>'; }).join('') + '</select>';
+      var pk = x.paperKeys.length === 1 ? x.paperKeys[0] : x.name;
+      var paper = x.paperKeys.length > 1 ? fmt.format(x.paper) :
+        '<input type="number" min="0" max="100000" value="' + x.paper + '" data-paper="' + esc(pk) + '" aria-label="Tickets papier de ' + esc(x.name) + '">';
+      return '<tr class="' + (i === 0 ? 'top1' : '') + '"><td class="rank">' + (i + 1) + '</td><td>' + esc(x.name) + '</td><td>' + sel + '</td>' +
+        '<td class="num">' + fmt.format(x.online) + '</td><td class="num">' + paper + '</td><td class="num"><b>' + fmt.format(x.total) + '</b></td><td class="num">' + eur.format(x.total * 2) + '</td></tr>';
+    }).join('');
+  }
+
+  function renderPodium(b){
+    $('podium').innerHTML = LEVELS.map(function(l){
+      var list = b.filter(function(x){ return x.level === l && x.total > 0; });
+      return '<div class="lvl"><h3>' + l + '</h3>' + (list.length ? '<ol>' + list.slice(0, 5).map(function(x, i){
+        return '<li class="' + (i < 2 ? 'win' : '') + '"><span class="who">' + esc(x.name) + '</span><span class="n">' + fmt.format(x.total) + ' tickets</span></li>';
+      }).join('') + '</ol>' : '<p class="empty">Aucun vendeur rangé dans ce niveau.</p>') + '</div>';
+    }).join('');
+  }
+
+  function renderAliases(){
+    if (!rows) { $('alias-card').hidden = true; return; }
+    var raw = {};
+    rows.forEach(function(r){ var k = r.by || ''; raw[k] = (raw[k] || 0) + r.n; });
+    var allParts = []; Object.keys(raw).forEach(function(k){ allParts = allParts.concat(parts(k)); });
+    var cmap = canonMap(allParts.concat(Object.keys(state.paper.bySeller || {})));
+    $('alias-card').hidden = false;
+    $('aliases').querySelector('tbody').innerHTML = Object.keys(raw).sort(function(a, b){ return fold(a).localeCompare(fold(b)); }).map(function(k){
+      var to = parts(k).map(function(p){ return cmap[p] || p; }).join(' + ');
+      return '<tr><td>' + (k ? esc(k) : '<i>(vide)</i>') + '</td><td class="num">' + fmt.format(raw[k]) + '</td><td>' +
+        (k ? '<input value="' + esc(state.aliases[k.toLowerCase()] || to) + '" data-alias="' + esc(k) + '" aria-label="Vendeur pour la saisie ' + esc(k) + '" style="min-height:38px;padding:4px 8px">' : esc(to)) + '</td></tr>';
+    }).join('');
+  }
+
+  function chart(){
+    var on = (state.online && state.online.byDay) || {}, pa = state.paper.byDay || {};
+    var days = Object.keys(on).concat(Object.keys(pa)).sort();
+    if (!days.length) { $('chart').innerHTML = '<p class="note">Pas encore de vente.</p>'; return; }
+    var s = [], d = new Date(days[0] + 'T12:00:00'), end = new Date(Math.max(new Date(days[days.length - 1] + 'T12:00:00'), Date.now()));
+    while (d <= end && s.length < 90) { var k = d.toLocaleDateString('sv-SE'); s.push({ day: k, on: on[k] || 0, pa: pa[k] || 0 }); d.setDate(d.getDate() + 1); }
+    var W = 640, H = 220, L = 34, R = 8, T = 10, B = 26;
+    var max = Math.max(4, Math.max.apply(null, s.map(function(x){ return x.on + x.pa; })));
+    var step = Math.pow(10, Math.floor(Math.log10(max))); if (max / step > 5) step *= 2; var top = Math.ceil(max / step) * step;
+    var cw = (W - L - R) / s.length, bw = Math.max(3, Math.min(22, cw * 0.62));
+    var y = function(v){ return T + (H - T - B) * (1 - v / top); };
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" style="min-width:480px" role="img" aria-label="Tickets vendus par jour, en ligne et papier">';
+    for (var g = 0; g <= top; g += step) svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--grid)"/><text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" text-anchor="end">' + g + '</text>';
+    var every = Math.ceil(s.length / 8);
+    s.forEach(function(x, i){
+      var cx = L + i * cw + (cw - bw) / 2, lab = new Date(x.day + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+      svg += '<g><title>' + lab + ' : ' + x.on + ' en ligne, ' + x.pa + ' papier</title>';
+      if (x.on) svg += '<rect x="' + cx + '" y="' + y(x.on) + '" width="' + bw + '" height="' + (y(0) - y(x.on)) + '" rx="2" fill="var(--blue)"/>';
+      if (x.pa) svg += '<rect x="' + cx + '" y="' + y(x.on + x.pa) + '" width="' + bw + '" height="' + (y(x.on) - y(x.on + x.pa)) + '" rx="2" fill="var(--gold)"/>';
+      svg += '</g>';
+      if (i % every === 0 || i === s.length - 1) svg += '<text x="' + (L + i * cw + cw / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + lab + '</text>';
+    });
+    $('chart').innerHTML = svg + '</svg>';
+  }
+
+  // ---------- Talons ----------
+  function stubsFor(onlyNew){
+    if (!rows) return [];
+    var done = {}; state.printed.forEach(function(id){ done[id] = 1; });
+    var all = [], allParts = []; rows.forEach(function(r){ allParts = allParts.concat(parts(r.by)); });
+    var cmap = canonMap(allParts);
+    rows.slice().sort(function(a, b){ return a.date - b.date; }).forEach(function(r){
+      if (onlyNew && done[r.billet]) return;
+      var by = parts(r.by).map(function(p){ return cmap[p] || p; }).join(' et ');
+      for (var k = 1; k <= r.n; k++) all.push({ billet: r.billet, k: k, n: r.n, name: r.name || 'Participant HelloAsso', tel: r.tel.replace(/(\d{2})(?=\d)/g, '$1 '), by: by });
+    });
+    return all;
+  }
+  function renderStubs(){
+    if (!rows) { $('print-new').disabled = $('print-all').disabled = true; return; }
+    var all = stubsFor(false).length, fresh = stubsFor(true).length;
+    $('stub-status').textContent = all + ' talons pour les ventes en ligne importées, dont ' + fresh + ' pas encore imprimé' + (fresh > 1 ? 's' : '') +
+      ' (' + Math.ceil(fresh / 21) + ' planche' + (Math.ceil(fresh / 21) > 1 ? 's' : '') + ').';
+    $('print-new').disabled = !fresh; $('print-all').disabled = !all;
+    $('print-new').textContent = 'Imprimer les nouveaux (' + fresh + ')';
+  }
+  function doPrint(list){
+    var html = '';
+    for (var i = 0; i < list.length; i += 21) {
+      html += '<div class="sheet' + ($('cut').checked ? ' cut' : '') + '">' + list.slice(i, i + 21).map(function(s){
+        return '<div class="stub"><div class="t"><span>Tombola de Noël · en ligne</span><span>' + s.k + '/' + s.n + '</span></div>' +
+          '<div class="nm">' + esc(s.name) + '</div><div class="ph">' + esc(s.tel || '—') + '</div>' +
+          '<div class="by">Vendu par : ' + esc(s.by || '—') + '</div><div class="ref"><span>HelloAsso n° ' + esc(s.billet) + '</span><span>P\'tits Rennevillois</span></div></div>';
+      }).join('') + '</div>';
+    }
+    $('print-area').innerHTML = html;
+    lastPrint = list.map(function(s){ return s.billet; }).filter(function(v, i, a){ return a.indexOf(v) === i; });
+    window.print();
+    $('mark-row').hidden = !lastPrint.length;
+  }
+  $('print-new').addEventListener('click', function(){ doPrint(stubsFor(true)); });
+  $('print-all').addEventListener('click', function(){ doPrint(stubsFor(false)); });
+  $('mark').addEventListener('click', async function(){
+    try { await api({ action: 'printed', ids: lastPrint }); $('mark-row').hidden = true; load(); } catch(e){ if (e.message !== 'auth') show(e.message); }
+  });
+  $('unprint').addEventListener('click', async function(){
+    if (!confirm('Remettre tous les talons « à imprimer » ?')) return;
+    try { await api({ action: 'unprint' }); load(); } catch(e){ if (e.message !== 'auth') show(e.message); }
+  });
+
+  // ---------- Saisies ----------
+  $('paper-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var seller = clean($('p-seller').value), n = Number($('p-n').value);
+    try {
+      await api({ action: 'paper', seller: seller, n: n });
+      $('p-ok').textContent = '+' + n + ' pour ' + seller; $('p-ok').hidden = false; setTimeout(function(){ $('p-ok').hidden = true; }, 4000);
+      $('p-n').value = ''; $('p-seller').value = ''; load();
+    } catch(err){ if (err.message !== 'auth') show(err.message); }
+  });
+  document.addEventListener('change', async function(e){
+    var t = e.target;
+    try {
+      if (t.dataset.level !== undefined) { await api({ action: 'level', seller: t.dataset.level, level: t.value }); state.levels[t.dataset.level] = t.value; render(); }
+      else if (t.dataset.paper !== undefined) { await api({ action: 'paperSet', seller: t.dataset.paper, n: Number(t.value) }); load(); }
+      else if (t.dataset.alias !== undefined) { await api({ action: 'alias', raw: t.dataset.alias, name: clean(t.value) }); state.aliases[t.dataset.alias.toLowerCase()] = clean(t.value); summarize(false); }
+    } catch(err){ if (err.message !== 'auth') show(err.message); }
+  });
+
+  $('login').addEventListener('submit', function(e){ e.preventDefault(); setPwd($('pwd').value); show('', $('login-err')); load(); });
+  $('refresh').addEventListener('click', load);
+  load();
+})();
+</script>
+</body>
+</html>
