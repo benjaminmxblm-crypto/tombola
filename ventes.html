@@ -101,11 +101,19 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
   .tk .num{font-size:15pt;font-weight:800;line-height:1}
   .tk .lb{font-size:6.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#555;margin-top:1mm}
   .tk .v{font-size:10pt;font-weight:800;line-height:1.15;border-bottom:0.2mm solid #999;padding-bottom:.6mm}
-  .tk .tic{box-sizing:border-box;padding:5mm 5mm 4mm;display:flex;flex-direction:column;justify-content:space-between;text-align:center}
-  .tk .tic .h{font-size:7pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#444}
-  .tk .tic .ti{font-size:17pt;font-weight:800;line-height:1.05}
-  .tk .tic .px{font-size:10pt;font-weight:800}
-  .tk .tic .ft{display:flex;justify-content:space-between;font-size:8pt;font-weight:800}
+  .tk{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .tk .num{font-family:'Baloo 2',Arial,sans-serif;color:#C62828;font-size:17pt}
+  .tk .tic{box-sizing:border-box;padding:3mm;position:relative}
+  .tk .fr{position:relative;box-sizing:border-box;height:100%;border:0.7mm solid #C62828;border-radius:4mm;background:#FFF6F4;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;padding:4mm 4mm 3mm 22mm}
+  .tk .fr .tree{position:absolute;left:3mm;bottom:2.5mm;width:16mm;height:auto}
+  .tk .fr .balls{position:absolute;left:2.5mm;top:0;width:18mm;height:auto}
+  .tk .fr .h{font-size:6.5pt;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8E1B1B}
+  .tk .fr .ti{font-family:'Baloo 2',Arial,sans-serif;font-size:19pt;font-weight:800;line-height:.95;color:#C62828}
+  .tk .fr .px{display:flex;align-items:center;gap:2mm;font-size:8.5pt;font-weight:800;color:#3A1A1A}
+  .tk .fr .px b{display:inline-grid;place-items:center;width:10mm;height:10mm;border-radius:50%;background:#F2B705;color:#3A1A1A;font-family:'Baloo 2',Arial,sans-serif;font-size:11pt}
+  .tk .fr .ft{align-self:stretch;display:flex;justify-content:space-between;align-items:baseline;font-size:7.5pt;font-weight:800;color:#3A1A1A;border-top:0.3mm dashed #E8A9A4;padding-top:1.5mm;white-space:nowrap;gap:2mm}
+  .tk .fr .ft .no{font-family:'Baloo 2',Arial,sans-serif;font-size:11pt;color:#C62828}
 }
 </style>
 </head>
@@ -463,6 +471,11 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
     $('print-new').disabled = !fresh; $('print-all').disabled = !all;
     $('print-new').textContent = 'Imprimer les nouveaux (' + fresh + ')';
   }
+  var TREE = '<svg class="tree" viewBox="0 0 60 84" aria-hidden="true"><path d="M30 2 l5 9 -10 0z" fill="#F2B705"/><path d="M30 8 L46 32 H38 L52 54 H42 L58 74 H2 L18 54 H8 L22 32 H14Z" fill="#2E7D4F"/>' +
+    '<rect x="25" y="74" width="10" height="9" rx="1.5" fill="#7A4A2A"/><circle cx="24" cy="30" r="3" fill="#C62828"/><circle cx="37" cy="44" r="3" fill="#F2B705"/><circle cx="20" cy="56" r="3" fill="#2B6FD6"/><circle cx="40" cy="64" r="3" fill="#C62828"/><circle cx="29" cy="50" r="2.4" fill="#fff"/></svg>';
+  var BALLS = '<svg class="balls" viewBox="0 0 80 40" aria-hidden="true"><g stroke="#C9A24A" stroke-width="1"><path d="M12 0v14"/><path d="M40 0v22"/><path d="M66 0v10"/></g>' +
+    '<circle cx="12" cy="20" r="6" fill="#C62828"/><circle cx="40" cy="29" r="7" fill="#F2B705"/><circle cx="66" cy="16" r="6" fill="#2E7D4F"/>' +
+    '<g fill="#fff" opacity=".6"><circle cx="10" cy="18" r="1.6"/><circle cx="37.5" cy="26.5" r="1.8"/><circle cx="64" cy="14" r="1.6"/></g></svg>';
   function doPrint(list){
     var html = '', carnet = $('fmt').value === 'carnet', per = carnet ? 6 : 21;
     var tw = Math.min(90, Math.max(30, Number($('talon').value) || 45));
@@ -472,8 +485,9 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
         if (carnet) return '<div class="tk" style="grid-template-columns:' + tw + 'mm 1fr"><div class="tal"><div class="num">N° ' + no + '</div>' +
           '<div class="lb">Nom, prénom</div><div class="v">' + esc(s.name) + '</div><div class="lb">Téléphone</div><div class="v">' + esc(s.tel || '—') + '</div>' +
           '<div class="lb">Vendu par</div><div class="v">' + esc(s.by || '—') + '</div><div class="lb">HelloAsso ' + esc(s.billet) + ' · ' + s.k + '/' + s.n + '</div></div>' +
-          '<div class="tic"><div class="h">Les P\'tits Rennevillois</div><div class="ti">Grande tombola<br>de Noël</div><div class="px">2 € le ticket · acheté en ligne</div>' +
-          '<div class="ft"><span>Tirage le 15 décembre 2026</span><span>N° ' + no + '</span></div></div></div>';
+          '<div class="tic"><div class="fr">' + TREE + BALLS + '<div class="h">Les P\'tits Rennevillois</div><div class="ti">Grande tombola<br>de Noël</div>' +
+          '<div class="px"><b>2 €</b>le ticket · acheté en ligne</div>' +
+          '<div class="ft"><span>Tirage le 15 décembre 2026</span><span class="no">N° ' + no + '</span></div></div></div></div>';
         return '<div class="stub"><div class="t"><span>Tombola de Noël · en ligne</span><span>' + s.k + '/' + s.n + '</span></div>' +
           '<div class="nm">' + esc(s.name) + '</div><div class="ph">' + esc(s.tel || '—') + '</div>' +
           '<div class="by">Vendu par : ' + esc(s.by || '—') + '</div><div class="ref"><span>N° ' + no + ' · HelloAsso ' + esc(s.billet) + '</span></div></div>';
