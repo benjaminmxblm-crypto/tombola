@@ -208,7 +208,6 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
           <button type="button" id="print-all" disabled>Tout imprimer</button>
           <label>Format<select id="fmt"><option value="carnet" selected>Comme les carnets (60 × 135 mm, 6 par page)</option><option value="label">Étiquettes Avery L7160 (21 par page)</option></select></label>
           <label id="talon-wrap">Largeur du talon (mm)<input type="number" id="talon" min="30" max="90" value="50" inputmode="numeric"></label>
-          <label id="coul-wrap">Couleur du bloc<select id="coul"><option value="#F4A7B9">Rose</option><option value="#F7B37C">Orange</option><option value="#C49BD6">Violet</option><option value="#8FC9E8">Bleu</option><option value="#8FD3B6">Vert</option><option value="#F3E27A">Jaune</option></select></label>
           <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="cut" checked style="min-height:auto">Traits de découpe</label>
         </div>
         <div class="form-row" id="mark-row" hidden>
@@ -464,10 +463,11 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
   }
   function doPrint(list){
     var html = '', carnet = $('fmt').value === 'carnet', per = carnet ? 6 : 21;
-    var tw = Math.min(90, Math.max(30, Number($('talon').value) || 50)), col = $('coul').value;
+    var tw = Math.min(90, Math.max(30, Number($('talon').value) || 50));
+    var COLS = ['#F4A7B9', '#F7B37C', '#C49BD6', '#8FD3B6', '#F3E27A', '#8FC9E8']; // rose, orange, violet, vert, jaune, bleu : on change tous les 10 tickets
     for (var i = 0; i < list.length; i += per) {
       html += '<div class="sheet' + (carnet ? ' carnet' : '') + ($('cut').checked ? ' cut' : '') + '">' + list.slice(i, i + per).map(function(s){
-        var no = 'L' + String(s.seq).padStart(3, '0');
+        var no = 'L' + String(s.seq).padStart(3, '0'), col = COLS[Math.floor((s.seq - 1) / 10) % COLS.length];
         if (carnet) return '<div class="tk" style="--c:' + col + '"><div class="band" style="left:0"></div><div class="band" style="left:51mm"></div><div class="perf" style="left:' + tw + 'mm"></div>' +
           '<div class="no" style="left:24mm;top:8mm">' + no + '</div><div class="no" style="right:12mm;top:14mm">' + no + '</div>' +
           '<div class="info" style="width:' + (tw - 14) + 'mm"><b>' + esc(s.name) + '</b>' + esc(s.tel || '') + '<br>Vendu par ' + esc(s.by || '—') + '<small>HelloAsso ' + esc(s.billet) + ' · ' + s.k + '/' + s.n + '</small></div></div>';
@@ -481,7 +481,7 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
     window.print();
     $('mark-row').hidden = !lastPrint.length;
   }
-  $('fmt').addEventListener('change', function(){ $('talon-wrap').hidden = $('coul-wrap').hidden = this.value !== 'carnet'; renderStubs(); });
+  $('fmt').addEventListener('change', function(){ $('talon-wrap').hidden = this.value !== 'carnet'; renderStubs(); });
   $('print-new').addEventListener('click', function(){ doPrint(stubsFor(true)); });
   $('print-all').addEventListener('click', function(){ doPrint(stubsFor(false)); });
   $('mark').addEventListener('click', async function(){
