@@ -92,6 +92,20 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
   .stub .ph{font-size:10.5pt;font-weight:800;letter-spacing:.02em}
   .stub .by{font-size:8pt;font-weight:700}
   .stub .ref{font-size:7pt;font-weight:700;color:#444;display:flex;justify-content:space-between}
+  /* Format carnet Bureau Vallée « bloc vendeur 60 × 135 mm » : 6 tickets par A4 paysage */
+  @page carnet{size:A4 landscape;margin:0}
+  .sheet.carnet{page:carnet;width:297mm;height:210mm;padding:15mm 13.5mm 0;grid-template-columns:repeat(2,135mm);grid-auto-rows:60mm;column-gap:0}
+  .tk{box-sizing:border-box;display:grid;font-family:'Nunito',Arial,sans-serif;color:#000;overflow:hidden}
+  .cut .tk{outline:0.2mm dashed #999;outline-offset:-0.1mm}
+  .tk .tal{box-sizing:border-box;padding:4mm 3.5mm;border-right:0.4mm dashed #777;display:flex;flex-direction:column;gap:1.2mm;overflow:hidden}
+  .tk .num{font-size:15pt;font-weight:800;line-height:1}
+  .tk .lb{font-size:6.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#555;margin-top:1mm}
+  .tk .v{font-size:10pt;font-weight:800;line-height:1.15;border-bottom:0.2mm solid #999;padding-bottom:.6mm}
+  .tk .tic{box-sizing:border-box;padding:5mm 5mm 4mm;display:flex;flex-direction:column;justify-content:space-between;text-align:center}
+  .tk .tic .h{font-size:7pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#444}
+  .tk .tic .ti{font-size:17pt;font-weight:800;line-height:1.05}
+  .tk .tic .px{font-size:10pt;font-weight:800}
+  .tk .tic .ft{display:flex;justify-content:space-between;font-size:8pt;font-weight:800}
 }
 </style>
 </head>
@@ -189,11 +203,13 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
 
       <section class="card">
         <h2>3. Talons des tickets en ligne, pour l'urne</h2>
-        <p class="note" style="margin-top:6px">Un talon par chance : un « lot de 5 tickets » donne 5 talons. Chaque talon porte le nom, le téléphone, le vendeur et le numéro de billet HelloAsso. Imprimez sur des planches d'étiquettes A4 3 × 7 (63,5 × 38,1 mm, type Avery L7160) à coller sur les talons du carnet, ou sur du papier normal à découper.</p>
+        <p class="note" style="margin-top:6px">Un talon par chance : un « lot de 5 tickets » donne 5 talons. Chaque talon porte le nom, le téléphone, le vendeur et le numéro de billet HelloAsso. Par défaut, les tickets sont imprimés au format de vos carnets Bureau Vallée (60 × 135 mm, talon + ticket, 6 par feuille A4) : découpez, gardez le talon pour l'urne. Mesurez la largeur du talon d'un vrai carnet (jusqu'aux pointillés) et indiquez-la ci-dessous pour que les talons aient exactement la même taille.</p>
         <p id="stub-status" style="font-weight:800;margin:12px 0 0">Importez d'abord l'export HelloAsso (étape 1).</p>
         <div class="form-row">
           <button class="primary" type="button" id="print-new" disabled>Imprimer les nouveaux</button>
           <button type="button" id="print-all" disabled>Tout imprimer</button>
+          <label>Format<select id="fmt"><option value="carnet" selected>Comme les carnets (60 × 135 mm, 6 par page)</option><option value="label">Étiquettes Avery L7160 (21 par page)</option></select></label>
+          <label id="talon-wrap">Largeur du talon (mm)<input type="number" id="talon" min="30" max="90" value="45" inputmode="numeric"></label>
           <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="cut" checked style="min-height:auto">Traits de découpe</label>
         </div>
         <div class="form-row" id="mark-row" hidden>
@@ -431,12 +447,11 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
   function stubsFor(onlyNew){
     if (!rows) return [];
     var done = {}; state.printed.forEach(function(id){ done[id] = 1; });
-    var all = [], allParts = []; rows.forEach(function(r){ allParts = allParts.concat(parts(r.by)); });
+    var all = [], seq = 0, allParts = []; rows.forEach(function(r){ allParts = allParts.concat(parts(r.by)); });
     var cmap = canonMap(allParts);
     rows.slice().sort(function(a, b){ return a.date - b.date; }).forEach(function(r){
-      if (onlyNew && done[r.billet]) return;
       var by = parts(r.by).map(function(p){ return cmap[p] || p; }).join(' et ');
-      for (var k = 1; k <= r.n; k++) all.push({ billet: r.billet, k: k, n: r.n, name: r.name || 'Participant HelloAsso', tel: r.tel.replace(/(\d{2})(?=\d)/g, '$1 '), by: by });
+      for (var k = 1; k <= r.n; k++) { seq++; if (!(onlyNew && done[r.billet])) all.push({ seq: seq, billet: r.billet, k: k, n: r.n, name: r.name || 'Participant HelloAsso', tel: r.tel.replace(/(\d{2})(?=\d)/g, '$1 '), by: by }); }
     });
     return all;
   }
@@ -444,17 +459,24 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
     if (!rows) { $('print-new').disabled = $('print-all').disabled = true; return; }
     var all = stubsFor(false).length, fresh = stubsFor(true).length;
     $('stub-status').textContent = all + ' talons pour les ventes en ligne importées, dont ' + fresh + ' pas encore imprimé' + (fresh > 1 ? 's' : '') +
-      ' (' + Math.ceil(fresh / 21) + ' planche' + (Math.ceil(fresh / 21) > 1 ? 's' : '') + ').';
+      ' (' + Math.ceil(fresh / ($('fmt').value === 'carnet' ? 6 : 21)) + ' feuille' + (Math.ceil(fresh / ($('fmt').value === 'carnet' ? 6 : 21)) > 1 ? 's' : '') + ' A4).';
     $('print-new').disabled = !fresh; $('print-all').disabled = !all;
     $('print-new').textContent = 'Imprimer les nouveaux (' + fresh + ')';
   }
   function doPrint(list){
-    var html = '';
-    for (var i = 0; i < list.length; i += 21) {
-      html += '<div class="sheet' + ($('cut').checked ? ' cut' : '') + '">' + list.slice(i, i + 21).map(function(s){
+    var html = '', carnet = $('fmt').value === 'carnet', per = carnet ? 6 : 21;
+    var tw = Math.min(90, Math.max(30, Number($('talon').value) || 45));
+    for (var i = 0; i < list.length; i += per) {
+      html += '<div class="sheet' + (carnet ? ' carnet' : '') + ($('cut').checked ? ' cut' : '') + '">' + list.slice(i, i + per).map(function(s){
+        var no = 'L' + String(s.seq).padStart(3, '0');
+        if (carnet) return '<div class="tk" style="grid-template-columns:' + tw + 'mm 1fr"><div class="tal"><div class="num">N° ' + no + '</div>' +
+          '<div class="lb">Nom, prénom</div><div class="v">' + esc(s.name) + '</div><div class="lb">Téléphone</div><div class="v">' + esc(s.tel || '—') + '</div>' +
+          '<div class="lb">Vendu par</div><div class="v">' + esc(s.by || '—') + '</div><div class="lb">HelloAsso ' + esc(s.billet) + ' · ' + s.k + '/' + s.n + '</div></div>' +
+          '<div class="tic"><div class="h">Les P\'tits Rennevillois</div><div class="ti">Grande tombola<br>de Noël</div><div class="px">2 € le ticket · acheté en ligne</div>' +
+          '<div class="ft"><span>Tirage le 15 décembre 2026</span><span>N° ' + no + '</span></div></div></div>';
         return '<div class="stub"><div class="t"><span>Tombola de Noël · en ligne</span><span>' + s.k + '/' + s.n + '</span></div>' +
           '<div class="nm">' + esc(s.name) + '</div><div class="ph">' + esc(s.tel || '—') + '</div>' +
-          '<div class="by">Vendu par : ' + esc(s.by || '—') + '</div><div class="ref"><span>HelloAsso n° ' + esc(s.billet) + '</span><span>P\'tits Rennevillois</span></div></div>';
+          '<div class="by">Vendu par : ' + esc(s.by || '—') + '</div><div class="ref"><span>N° ' + no + ' · HelloAsso ' + esc(s.billet) + '</span></div></div>';
       }).join('') + '</div>';
     }
     $('print-area').innerHTML = html;
@@ -462,6 +484,7 @@ svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
     window.print();
     $('mark-row').hidden = !lastPrint.length;
   }
+  $('fmt').addEventListener('change', function(){ $('talon-wrap').hidden = this.value !== 'carnet'; renderStubs(); });
   $('print-new').addEventListener('click', function(){ doPrint(stubsFor(true)); });
   $('print-all').addEventListener('click', function(){ doPrint(stubsFor(false)); });
   $('mark').addEventListener('click', async function(){
